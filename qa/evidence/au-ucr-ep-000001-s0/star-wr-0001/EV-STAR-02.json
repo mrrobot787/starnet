@@ -1,0 +1,31 @@
+{
+  "evidence_id": "EV-STAR-02",
+  "work_request_id": "STAR-WR-0001",
+  "experiment_id": "AU-UCR-EP-000001",
+  "gate": "G02",
+  "created_at_utc": "2026-10-04T15:08:40.6400455Z",
+  "producer": "Cursor technical executor",
+  "source": "local branch, local remote-tracking ref, and independent live origin read",
+  "claim_tested": "The local and live remote execution refs have exact SHA parity.",
+  "method": [
+    "git rev-parse refs/heads/cursor/ucr-s0-execution-3141",
+    "git rev-parse refs/remotes/origin/cursor/ucr-s0-execution-3141",
+    "git ls-remote origin refs/heads/cursor/ucr-s0-execution-3141"
+  ],
+  "result": "PASS",
+  "epistemic_state": "DIRECTLY_OBSERVED",
+  "branch": "cursor/ucr-s0-execution-3141",
+  "expected_sha": "8edc19c23271417408e62b2f31a5daa12972d6a9",
+  "local_sha": "8edc19c23271417408e62b2f31a5daa12972d6a9",
+  "remote_tracking_sha": "8edc19c23271417408e62b2f31a5daa12972d6a9",
+  "live_remote_sha": "8edc19c23271417408e62b2f31a5daa12972d6a9",
+  "parity": "PASS",
+  "refs_modified_by_gate": false,
+  "dependencies": [
+    "EV-STAR-00",
+    "EV-STAR-01"
+  ],
+  "limitations": [
+    "SHA parity is technical publication evidence only and is not governance acceptance."
+  ]
+}

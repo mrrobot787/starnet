@@ -1,0 +1,80 @@
+{
+  "evidence_id": "EV-STAR-05",
+  "work_request_id": "STAR-WR-0001",
+  "experiment_id": "AU-UCR-EP-000001",
+  "gate": "G05",
+  "created_at_utc": "2026-10-04T15:11:00Z",
+  "producer": "Cursor technical executor",
+  "source": "current execution branch and installed dependency tree",
+  "claim_tested": "The current StarNet implementation passes applicable configuration, dependency, build-input, and automated test validation.",
+  "method": [
+    "node scripts/qa/au-ucr-s0-readiness.mjs check",
+    "npm run validate:raw",
+    "node scripts/stage-frontend-dist.mjs --check",
+    "npm run website:stage:check",
+    "npm ls --all",
+    "npm run test:fast"
+  ],
+  "result": "FAIL",
+  "epistemic_state": "DIRECTLY_OBSERVED",
+  "commit_tested": "8edc19c23271417408e62b2f31a5daa12972d6a9",
+  "checks": [
+    {
+      "name": "S0 readiness consistency",
+      "result": "PASS",
+      "detail": "PACKAGE_CONSISTENT_S1_CLOSED"
+    },
+    {
+      "name": "validate:raw",
+      "result": "FAIL",
+      "exit_code": 1,
+      "detail": "package.json targets test/validate_map.js, but that module is absent (MODULE_NOT_FOUND)."
+    },
+    {
+      "name": "desktop frontend staging plan",
+      "result": "PASS",
+      "detail": "Would stage 16,352 files / 296.6 MB and omit 669 review/source files / 951.4 MB."
+    },
+    {
+      "name": "website staging check",
+      "result": "PASS",
+      "detail": "Read-only staging check completed; pricing and source-only assets remained held back."
+    },
+    {
+      "name": "installed dependency tree",
+      "result": "PASS_WITH_WARNINGS",
+      "exit_code": 0,
+      "detail": "npm ls --all completed. Platform-inapplicable optional packages were absent and @emnapi/runtime, @img/sharp-wasm32, and tslib were reported as extraneous."
+    },
+    {
+      "name": "test:fast",
+      "result": "FAIL",
+      "exit_code": 1,
+      "detail": "run-fast-tests failed at step 73/953: node test/checkpoint-default-on.test.js. The test could not locate checkpointsEnabledFromEnv in sidecar/index.js and then threw TypeError while dereferencing a null regex match."
+    },
+    {
+      "name": "test:http",
+      "result": "NOT_RUN",
+      "detail": "Stopped after the material test:fast failure."
+    },
+    {
+      "name": "desktop production build",
+      "result": "NOT_RUN",
+      "detail": "Stopped after the material test:fast failure."
+    }
+  ],
+  "gate_disposition": "REVISE_IMPLEMENTATION",
+  "later_gates_authorized": false,
+  "dependencies": [
+    "EV-STAR-00",
+    "EV-STAR-01",
+    "EV-STAR-02",
+    "EV-STAR-03",
+    "EV-STAR-04"
+  ],
+  "limitations": [
+    "The HTTP suite and production build were not run after the material fast-test failure.",
+    "A running service returning HTTP 200/ok was observed in G01, but G06 was not executed.",
+    "No skipped or unrun check is classified as PASS."
+  ]
+}

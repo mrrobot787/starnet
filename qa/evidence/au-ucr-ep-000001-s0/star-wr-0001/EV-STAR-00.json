@@ -1,0 +1,46 @@
+{
+  "evidence_id": "EV-STAR-00",
+  "work_request_id": "STAR-WR-0001",
+  "experiment_id": "AU-UCR-EP-000001",
+  "gate": "G00",
+  "created_at_utc": "2026-10-04T15:07:52.5005946Z",
+  "producer": "Cursor technical executor",
+  "source": "local StarNet workspace and GitHub CLI",
+  "claim_tested": "The execution environment is the intended StarNet repository and is ready for observational validation.",
+  "method": [
+    "git rev-parse --show-toplevel",
+    "gh repo view",
+    "git status --porcelain=v1",
+    "git remote -v",
+    "git version",
+    "node --version",
+    "npm --version",
+    "gh auth status"
+  ],
+  "result": "PASS",
+  "epistemic_state": "DIRECTLY_OBSERVED",
+  "repository": "mrrobot787/starnet",
+  "working_directory": "C:\\Users\\hakee\\.cursor\\starnet-ucr-publish-2",
+  "branch": "cursor/ucr-s0-execution-3141",
+  "commit_tested": "8edc19c23271417408e62b2f31a5daa12972d6a9",
+  "initial_worktree_state": "CLEAN",
+  "remote": "https://github.com/mrrobot787/starnet.git",
+  "runtime": {
+    "os_user": "hsmplc-workstat\\hakee",
+    "git": "2.51.0.windows.1",
+    "node": "v22.19.0",
+    "npm": "10.9.3",
+    "powershell": "7.6.6"
+  },
+  "credential_observation": {
+    "authenticated_github_principal": "mrrobot787",
+    "git_protocol": "https",
+    "secret_values_recorded": false,
+    "governance_authority_inferred": false
+  },
+  "dependencies": [],
+  "limitations": [
+    "GitHub authentication proves a technical identity only.",
+    "This receipt does not assign independent-review or A09 authority."
+  ]
+}
