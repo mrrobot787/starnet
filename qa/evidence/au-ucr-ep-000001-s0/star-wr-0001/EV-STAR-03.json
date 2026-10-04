@@ -1,0 +1,124 @@
+{
+  "evidence_id": "EV-STAR-03",
+  "work_request_id": "STAR-WR-0001",
+  "experiment_id": "AU-UCR-EP-000001",
+  "gate": "G03",
+  "created_at_utc": "2026-10-04T15:09:00.3071616Z",
+  "producer": "Cursor lineage executor",
+  "source": "immutable local Git commit graph and live ref identities frozen by EV-STAR-01",
+  "claim_tested": "The execution, governance, and remote base lineages can be reconstructed without rewriting history.",
+  "method": [
+    "git cat-file",
+    "git merge-base",
+    "git merge-base --is-ancestor",
+    "git rev-list --left-right --count",
+    "git log --reverse",
+    "git diff --name-status",
+    "git diff --stat"
+  ],
+  "result": "PASS_WITH_RECORDED_DIVERGENCE",
+  "epistemic_state": "DIRECTLY_OBSERVED",
+  "nodes": {
+    "canonical_s0": "cdc793ba738c688ef2493fcd196043bfb3fddd77",
+    "execution": "8edc19c23271417408e62b2f31a5daa12972d6a9",
+    "governance": "3f2dd71db76ddc89ff2dabad391665f4a381698c",
+    "remote_base": "0b73cb2fb9c3046fee800c18337100a6fb0f4ac3",
+    "local_base": "fbddbf992f8e7082196f07c3024781fcf1c276fc"
+  },
+  "machine_readable_graph": {
+    "edges": [
+      {
+        "parent": "fbddbf992f8e7082196f07c3024781fcf1c276fc",
+        "child": "cdc793ba738c688ef2493fcd196043bfb3fddd77",
+        "relationship": "canonical_s0_commit"
+      },
+      {
+        "parent": "cdc793ba738c688ef2493fcd196043bfb3fddd77",
+        "child": "3f2dd71db76ddc89ff2dabad391665f4a381698c",
+        "relationship": "governance_addendum"
+      },
+      {
+        "parent": "cdc793ba738c688ef2493fcd196043bfb3fddd77",
+        "child": "11b2c2875c2af7774e2099408373d564107f3bd3",
+        "relationship": "readiness_evidence_layer"
+      },
+      {
+        "parent": "11b2c2875c2af7774e2099408373d564107f3bd3",
+        "child": "8bfdfcf928e4e794b1483ea835b821b7674343c5",
+        "relationship": "rubric_validator_fix"
+      },
+      {
+        "parent": "8bfdfcf928e4e794b1483ea835b821b7674343c5",
+        "child": "8edc19c23271417408e62b2f31a5daa12972d6a9",
+        "relationship": "work_note"
+      },
+      {
+        "parent": "cdc793ba738c688ef2493fcd196043bfb3fddd77",
+        "child": "d091ac27981fdcc23c46f07a59e17a3a52f32979",
+        "relationship": "s0_merge_parent"
+      },
+      {
+        "parent": "3f2dd71db76ddc89ff2dabad391665f4a381698c",
+        "child": "83a95b764822d281fcfc482ebe4101b51a8ad862",
+        "relationship": "governance_sync_merge_parent"
+      },
+      {
+        "parents": [
+          "d091ac27981fdcc23c46f07a59e17a3a52f32979",
+          "83a95b764822d281fcfc482ebe4101b51a8ad862"
+        ],
+        "child": "0b73cb2fb9c3046fee800c18337100a6fb0f4ac3",
+        "relationship": "governance_pr_merge"
+      }
+    ]
+  },
+  "ancestry": {
+    "canonical_s0_is_execution_ancestor": true,
+    "canonical_s0_is_governance_ancestor": true,
+    "canonical_s0_is_remote_base_ancestor": true,
+    "governance_is_execution_ancestor": false,
+    "governance_is_remote_base_ancestor": true,
+    "remote_base_is_execution_ancestor": false,
+    "execution_governance_merge_base": "cdc793ba738c688ef2493fcd196043bfb3fddd77",
+    "execution_base_merge_base": "cdc793ba738c688ef2493fcd196043bfb3fddd77",
+    "governance_base_merge_base": "3f2dd71db76ddc89ff2dabad391665f4a381698c"
+  },
+  "divergence_counts": {
+    "canonical_s0_to_execution": {
+      "left": 0,
+      "right": 3
+    },
+    "canonical_s0_to_governance": {
+      "left": 0,
+      "right": 1
+    },
+    "canonical_s0_to_remote_base": {
+      "left": 0,
+      "right": 4
+    },
+    "remote_base_to_execution": {
+      "left": 4,
+      "right": 3
+    }
+  },
+  "execution_post_s0_commits": [
+    "11b2c2875c2af7774e2099408373d564107f3bd3",
+    "8bfdfcf928e4e794b1483ea835b821b7674343c5",
+    "8edc19c23271417408e62b2f31a5daa12972d6a9"
+  ],
+  "separation_findings": [
+    "The execution and governance branches intentionally diverge after canonical S0.",
+    "The governance addendum file is present in the governance and remote-base trees but absent from the execution tree.",
+    "The remote base and governance commits have identical trees at ae99976557967adb3ad13242de553d32512183e1.",
+    "The execution branch adds readiness evidence, validators, and the work note without rewriting canonical S0."
+  ],
+  "refs_modified_by_gate": false,
+  "dependencies": [
+    "EV-STAR-01",
+    "EV-STAR-02"
+  ],
+  "limitations": [
+    "The local feat/harness-backend ref is stale and must not be used as the authoritative base.",
+    "This lineage result explains branch relationships but does not approve the divergence."
+  ]
+}

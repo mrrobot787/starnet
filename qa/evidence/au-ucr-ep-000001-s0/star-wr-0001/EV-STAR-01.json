@@ -1,0 +1,51 @@
+{
+  "evidence_id": "EV-STAR-01",
+  "work_request_id": "STAR-WR-0001",
+  "experiment_id": "AU-UCR-EP-000001",
+  "gate": "G01",
+  "created_at_utc": "2026-10-04T15:08:19.3180807Z",
+  "producer": "Cursor technical executor",
+  "source": "local refs, live origin refs, Git worktree/configuration, and local StarNet service",
+  "claim_tested": "The current StarNet state can be frozen without destructive cleanup or ref mutation.",
+  "method": [
+    "git for-each-ref",
+    "git ls-remote --heads --tags origin",
+    "git worktree list --porcelain",
+    "git config --get-regexp",
+    "git status --porcelain=v1",
+    "HTTP reads of the station root and health endpoint"
+  ],
+  "result": "PASS",
+  "epistemic_state": "DIRECTLY_OBSERVED",
+  "commit_tested": "8edc19c23271417408e62b2f31a5daa12972d6a9",
+  "snapshot": {
+    "local_execution_ref": "8edc19c23271417408e62b2f31a5daa12972d6a9",
+    "remote_execution_ref": "8edc19c23271417408e62b2f31a5daa12972d6a9",
+    "local_governance_ref": "3f2dd71db76ddc89ff2dabad391665f4a381698c",
+    "remote_governance_ref": "3f2dd71db76ddc89ff2dabad391665f4a381698c",
+    "local_base_ref": "fbddbf992f8e7082196f07c3024781fcf1c276fc",
+    "remote_base_ref": "0b73cb2fb9c3046fee800c18337100a6fb0f4ac3",
+    "remote_additional_ref": {
+      "ref": "refs/heads/copilot/revise-review-path-for-merged-commits",
+      "sha": "0b73cb2fb9c3046fee800c18337100a6fb0f4ac3"
+    },
+    "tags": [],
+    "worktree_count": 1,
+    "evidence_namespace_is_only_dirty_path": true,
+    "service_root_http_status": 200,
+    "service_health_http_status": 200,
+    "service_health_body": "ok"
+  },
+  "integrity": {
+    "destructive_cleanup_performed": false,
+    "refs_modified_by_gate": false,
+    "manifest_hash": "PENDING_EV_STAR_10"
+  },
+  "dependencies": [
+    "EV-STAR-00"
+  ],
+  "limitations": [
+    "The local feat/harness-backend branch is stale relative to origin and is recorded, not repaired.",
+    "Runtime functionality beyond HTTP reachability is evaluated separately in G06."
+  ]
+}
