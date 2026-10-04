@@ -1,13 +1,41 @@
-# AU-UCR-S0-IDENTITY-001 evidence (final)
+# AU-UCR-S0-IDENTITY-001 evidence (blocked pending frozen package)
 
 External output only — not a canonical package input. **No frozen-package or repository mutations.**
+This receipt is not final reviewable identity evidence until the frozen package at
+`07d9ab53cecdec9a68efd7d25edadeb10db71538` is supplied by a commit-addressed ref/bundle or by the
+`qa/evidence/au-ucr-ep-000001-local/` evidence tree.
 
 Supersedes: `/opt/cursor/artifacts/au-ucr-s0-identity-001-evidence.md` (remapped `EV-I` table; preserved as superseded).
+
+## Receipt identity
+
+- `experiment_id`: `AU-UCR-EP-000001`
+- `sprint_id`: `S0`
+- `work_item_id`: `AU-UCR-S0-IDENTITY-001`
+- `owner_lane`: `unassigned_role_only` (`S0_WORKTREE_LANE_REGISTER.yaml`)
+- `branch`: `cursor/ucr-s0-local-001-3141`
+- `commit_tested`: `07d9ab53cecdec9a68efd7d25edadeb10db71538`
+- `gate_set`: `EV-I00`..`EV-I19`
+- `outcome`: `blocked`
+- `reviewer`: `not_run` (governed review handoff `NOT_PRODUCED`, `EV-I14`..`EV-I16`)
+- `review_outcome`: `blocked` (frozen evidence tree/bundle absent from this PR)
+- `created_at_utc`: `2026-10-03T18:05:00Z`
 
 ## Required Cursor Completion Report
 
 | Field | Exact report |
 | --- | --- |
+| `experiment_id` | `AU-UCR-EP-000001` |
+| `sprint_id` | `S0` |
+| `work_item_id` | `AU-UCR-S0-IDENTITY-001` |
+| `owner_lane` | `unassigned_role_only` |
+| `branch` | `cursor/ucr-s0-local-001-3141` |
+| `commit_tested` | `07d9ab53cecdec9a68efd7d25edadeb10db71538` |
+| `gate_set` | `EV-I00`..`EV-I19` |
+| `outcome` | `blocked` |
+| `reviewer` | `not_run` — governed review handoff `NOT_PRODUCED`, `EV-I14`..`EV-I16` |
+| `review_outcome` | `blocked` — frozen evidence tree/bundle absent from this PR |
+| `created_at_utc` | `2026-10-03T18:05:00Z` |
 | **Work Request** | `AU-UCR-S0-IDENTITY-001` |
 | **Execution mode** | Sequential fail-closed; read-only on frozen local evidence |
 | **Initial state** | `BLOCKED_IDENTITY` |
@@ -50,6 +78,7 @@ Supersedes: `/opt/cursor/artifacts/au-ucr-s0-identity-001-evidence.md` (remapped
 | **Unauthorized execution receipts** | `none detected` (frozen `ucr-state-verification.json`) |
 | **Governed review handoff** | `NOT_PRODUCED` (`EV-I14`–`EV-I16`) |
 | **Assignment request package** | `/opt/cursor/artifacts/au-ucr-s0-identity-001-assignment-requests.md` — `REQUEST_ONLY_NOT_AUTHORIZATION` (`EV-I03`) |
+| **Frozen package recoverability** | `BLOCKED` — see `qa/evidence/au-ucr-ep-000001-s0/au-ucr-s0-identity-001-frozen-package-recovery.md` |
 | **Repository mutations** | `none` |
 | **Forge mutations** | `none` |
 | **Verification log** | `/opt/cursor/artifacts/au-ucr-s0-identity-001-verification.log` |
@@ -60,6 +89,7 @@ Supersedes: `/opt/cursor/artifacts/au-ucr-s0-identity-001-evidence.md` (remapped
 | Check | Result |
 | --- | --- |
 | HEAD | `07d9ab53cecdec9a68efd7d25edadeb10db71538` |
+| PR recoverability | `BLOCKED` — no checked-in evidence tree, no advertised origin ref, and no supplied bundle for this commit |
 | Deterministic package verifier | `PASS` |
 | Canonical manifest SHA-256 | `8361de5c29db1de3ba2c260ee1154c1776ec4cc0da29eca3fe5e35c677146c91` |
 | Evidence manifest SHA-256 | `e917f89183a32e34d2196172f1dd96e85b1e2dd45358625f172d123cf3e861f4` |
@@ -73,7 +103,7 @@ Exactly twenty IDs; no remapping, aliases, or extras.
 | ID | Exact meaning | Outcome | Produced artifact / basis |
 | --- | --- | --- | --- |
 | `EV-I00` | identity-phase preflight | `PASS_FAIL_CLOSED` | Preflight + verifier; entry `BLOCKED_IDENTITY` |
-| `EV-I01` | frozen local evidence integrity | `PASS` | `verify-au-ucr-s0-local-001-evidence.py`; hashes above |
+| `EV-I01` | frozen local evidence integrity | `BLOCKED_FOR_REVIEW` | Claimed local verifier hashes are recorded, but the commit-addressed evidence tree/bundle is absent from this PR; see frozen-package recovery note |
 | `EV-I02` | actor-assignment discovery register | `PRODUCED` — all four roles `MISSING_REQUIRED_RECORD` | Discovery register below; sources: frozen `actor-assignment-state.json`, `S0_WORKTREE_LANE_REGISTER.yaml`, GOV-001 addendum |
 | `EV-I03` | missing-assignment request package | `PRODUCED` — `REQUEST_ONLY_NOT_AUTHORIZATION` | `/opt/cursor/artifacts/au-ucr-s0-identity-001-assignment-requests.md` |
 | `EV-I04` | assignment-authority verification | `MISSING_REQUIRED_RECORD` / `BLOCKED` | No P1 assignment-authority record; frozen `assignment-authority-verification.json` |
@@ -145,4 +175,7 @@ Resolution: remain `BLOCKED_IDENTITY`. Request-only documents (`EV-I03`) do not 
 
 ## Governed conclusion
 
-`BLOCKED_IDENTITY` — preflight and frozen integrity passed (`IDENTITY_PREFLIGHT_COMPLETE` reached), but P1 assignment-authority remains absent. No role inference; no QA, review, or handoff produced.
+`BLOCKED_IDENTITY` — the original local run recorded preflight hashes, but this PR does not contain
+the frozen evidence tree or a commit-addressed bundle/ref for `07d9ab53cecdec9a68efd7d25edadeb10db71538`.
+Treat identity evidence as blocked for review until that package is supplied. No role inference; no
+QA, review, or handoff produced.

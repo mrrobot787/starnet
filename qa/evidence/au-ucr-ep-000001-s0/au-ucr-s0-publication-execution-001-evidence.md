@@ -2,6 +2,18 @@
 
 ## Receipt identity
 
+- `experiment_id`: `AU-UCR-EP-000001`
+- `sprint_id`: `S0`
+- `work_item_id`: `AU-UCR-S0-PUBLICATION-EXECUTION-001`
+- `owner_lane`: `unassigned_role_only` (`S0_WORKTREE_LANE_REGISTER.yaml`)
+- `branch`: `cursor/ucr-s0-recovery-3141`
+- `commit_tested`: `887b1d9586b005606e1d8985e6c47c70a4a2900e`
+- `gate_set`: `EV-PEX-00`..`EV-PEX-12`
+- `outcome`: `blocked`
+- `reviewer`: `not_run` (publication-only lane; governed review receipts `NOT_PRODUCED`)
+- `review_outcome`: `blocked`
+- `created_at_utc`: `2026-10-03T18:35:00Z`
+
 - Work item: `AU-UCR-S0-PUBLICATION-EXECUTION-001`
 - Scope: **publication-only** (no identity, review, acceptance, or execution advancement)
 - Captured at: `2026-10-03T18:35:00Z`
@@ -114,6 +126,17 @@ recorded only as RCA context, not re-mapped here.
 
 | Field | Exact report |
 | --- | --- |
+| `experiment_id` | `AU-UCR-EP-000001` |
+| `sprint_id` | `S0` |
+| `work_item_id` | `AU-UCR-S0-PUBLICATION-EXECUTION-001` |
+| `owner_lane` | `unassigned_role_only` |
+| `branch` | `cursor/ucr-s0-recovery-3141` |
+| `commit_tested` | `887b1d9586b005606e1d8985e6c47c70a4a2900e` |
+| `gate_set` | `EV-PEX-00`..`EV-PEX-12` |
+| `outcome` | `blocked` |
+| `reviewer` | `not_run` — publication-only lane; governed review receipts `NOT_PRODUCED` |
+| `review_outcome` | `blocked` |
+| `created_at_utc` | `2026-10-03T18:35:00Z` |
 | Work item | `AU-UCR-S0-PUBLICATION-EXECUTION-001` |
 | Execution mode | Sequential fail-closed; publication-only |
 | Terminal status | `BLOCKED_PUBLICATION_AUTHORITY` |
@@ -133,7 +156,7 @@ recorded only as RCA context, not re-mapped here.
 | Publication actor | `cursor[bot]` — **no write authority** (`permissions.push=false`) |
 | Push result | one normal push failed HTTP 403 |
 | AML RCA | separate repo; not selected (`EV-PEX-11`) |
-| Artifact references | `/opt/cursor/artifacts/au-ucr-s0-publication-execution-001-evidence.md`; `/opt/cursor/artifacts/au-ucr-s0-publication-execution-001-verification.log` |
+| Artifact references | `qa/evidence/au-ucr-ep-000001-s0/au-ucr-s0-publication-execution-001-evidence.md`; `/opt/cursor/artifacts/au-ucr-s0-publication-execution-001-verification.log` |
 | Actions not taken | no force; no identity lane; no in-repo edits |
 
 ## Governed conclusion

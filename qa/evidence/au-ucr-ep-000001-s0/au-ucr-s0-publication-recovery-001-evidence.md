@@ -2,6 +2,18 @@
 
 ## Receipt identity
 
+- `experiment_id`: `AU-UCR-EP-000001`
+- `sprint_id`: `S0`
+- `work_item_id`: `AU-UCR-S0-PUBLICATION-RECOVERY-001`
+- `owner_lane`: `unassigned_role_only` (`S0_WORKTREE_LANE_REGISTER.yaml`)
+- `branch`: `cursor/ucr-s0-recovery-3141`
+- `commit_tested`: `887b1d9586b005606e1d8985e6c47c70a4a2900e`
+- `gate_set`: `EV-PUB-00`..`EV-PUB-11`
+- `outcome`: `blocked`
+- `reviewer`: `not_run` (publication-only lane; identity/review receipts `NOT_PRODUCED`)
+- `review_outcome`: `blocked`
+- `created_at_utc`: `2026-10-03T18:24:00Z`
+
 - Work item: `AU-UCR-S0-PUBLICATION-RECOVERY-001`
 - Scope: **publication-only** (no identity, review, acceptance, or execution advancement)
 - Captured at: `2026-10-03T18:24:00Z`
@@ -74,6 +86,17 @@ remains `NOT_PRODUCED`.
 
 | Field | Exact report |
 | --- | --- |
+| `experiment_id` | `AU-UCR-EP-000001` |
+| `sprint_id` | `S0` |
+| `work_item_id` | `AU-UCR-S0-PUBLICATION-RECOVERY-001` |
+| `owner_lane` | `unassigned_role_only` |
+| `branch` | `cursor/ucr-s0-recovery-3141` |
+| `commit_tested` | `887b1d9586b005606e1d8985e6c47c70a4a2900e` |
+| `gate_set` | `EV-PUB-00`..`EV-PUB-11` |
+| `outcome` | `blocked` |
+| `reviewer` | `not_run` — publication-only lane; identity/review receipts `NOT_PRODUCED` |
+| `review_outcome` | `blocked` |
+| `created_at_utc` | `2026-10-03T18:24:00Z` |
 | Work item | `AU-UCR-S0-PUBLICATION-RECOVERY-001` |
 | Terminal status | `BLOCKED_PUBLICATION_AUTHORITY` |
 | Earliest unresolved gate | Remote publication authority / receipt (`EV-PUB-04` `BLOCKED`, `EV-PUB-05` `BLOCKED`, `EV-PUB-06` `NOT_PUBLISHED`) |
@@ -90,7 +113,7 @@ remains `NOT_PRODUCED`.
 | Publication actor | `cursor[bot]` via ambient credentials — **no write authority** to owner repo |
 | Push result | one normal push failed HTTP 403 |
 | AML RCA | Separate repo `/workspace` (`mrrobot787/aml`); not used for this publication run |
-| Artifact references | `/opt/cursor/artifacts/au-ucr-s0-publication-recovery-001-evidence.md`; `/opt/cursor/artifacts/au-ucr-s0-publication-recovery-001-verification.log` |
+| Artifact references | `qa/evidence/au-ucr-ep-000001-s0/au-ucr-s0-publication-recovery-001-evidence.md`; `/opt/cursor/artifacts/au-ucr-s0-publication-recovery-001-verification.log` |
 | Actions not taken | no force push; no identity/review/acceptance/execution transitions; no provisional identity output changes; no in-repo edits |
 
 ## Governed conclusion
