@@ -19,6 +19,8 @@
     "receipt": "EV-INF-PRE-A09-AUTHORITY-NAMES-00",
     "role_names_populated": true,
     "authority_evidence_populated": true,
+    "deterministic_readiness_receipt": "EV-INF-PRE-A09-DETERMINISTIC-READINESS-00",
+    "deterministic_readiness_passed": true,
     "named_assignment_authority_complete": false,
     "submission_disposition": "READY_TO_SUBMIT_AS_BLOCKED_PRE_A09_EVIDENCE_ONLY"
   },
@@ -120,6 +122,13 @@
       "result": "PASS_WITH_BLOCKING_GOVERNANCE_GAPS",
       "receipt": "qa/evidence/au-ucr-ep-000001-s0/star-wr-0001/EV-INF-PRE-A09-AUTHORITY-NAMES-00.json",
       "observed": "Required role names and authority-source evidence are populated; named assignment authority, Decision Chair receipt, QA certification, and execution-release receipt remain absent."
+    },
+    {
+      "id": "TASK-STARNET-008",
+      "claim": "Run deterministic readiness checks before A09 submission",
+      "result": "PASS_WITH_A09_TRANSITION_CLOSED",
+      "receipt": "qa/evidence/au-ucr-ep-000001-s0/star-wr-0001/EV-INF-PRE-A09-DETERMINISTIC-READINESS-00.json",
+      "observed": "PRE_A09 receipts parse, the STAR-WR-0001 manifest verifies, and scripts/qa/au-ucr-s0-readiness.mjs check returns PACKAGE_CONSISTENT_S1_CLOSED."
     }
   ],
   "acceptance_mapping": {
@@ -138,7 +147,7 @@
     "starnet_bridge": "VERIFIED_PASS",
     "au_context_propagation": "GOVERNANCE_CONTEXT_VERIFIED__AU_ARTIFACTS_NOT_INGESTED",
     "authority_names": "ROLE_NAMES_AND_AUTHORITY_SOURCES_POPULATED__NAMED_ASSIGNMENTS_MISSING",
-    "deterministic_readiness": "REQUIRED_BEFORE_A09_SUBMISSION",
+    "deterministic_readiness": "PASSED_WITH_S1_CLOSED",
     "capability_certification": "NOT_ESTABLISHED",
     "a09": "NO_DECISION_NO_TRANSITION"
   },
@@ -155,6 +164,7 @@
     "No installation success, runtime pass, model response, authority-name receipt, or deterministic readiness check is classified as capability certification or A09 promotion."
   ],
   "dependencies": [
-    "EV-INF-PRE-A09-AUTHORITY-NAMES-00"
+    "EV-INF-PRE-A09-AUTHORITY-NAMES-00",
+    "EV-INF-PRE-A09-DETERMINISTIC-READINESS-00"
   ]
 }
