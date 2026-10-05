@@ -1,0 +1,65 @@
+{
+  "evidence_id": "EV-INF-PRE-A09-DETERMINISTIC-READINESS-00",
+  "work_request_id": "STAR-WR-0001",
+  "experiment_id": "AU-UCR-EP-000001",
+  "sprint_id": "S0",
+  "governance_stage": "PRE_A09",
+  "created_at_utc": "2026-10-05T18:22:03Z",
+  "producer": "Cursor technical executor",
+  "source": "local deterministic command execution on cursor/populate-authority-readiness-7886",
+  "claim_tested": "PRE_A09 role-name, authority-evidence, manifest, and S0 readiness records are deterministic and internally consistent before A09 submission.",
+  "result": "PASS_WITH_A09_TRANSITION_CLOSED",
+  "epistemic_state": "DIRECTLY_OBSERVED",
+  "repository": {
+    "path": "/workspace",
+    "branch": "cursor/populate-authority-readiness-7886",
+    "commit_tested": "2ea38d86a19697b80a827d2dfd83a9219e145532",
+    "base_branch": "feat/harness-backend"
+  },
+  "checks": [
+    {
+      "name": "PRE_A09 receipt JSON parse",
+      "command": "node -e \"for (const f of ['qa/evidence/au-ucr-ep-000001-s0/star-wr-0001/EV-INF-PRE-A09-AUTHORITY-NAMES-00.json','qa/evidence/au-ucr-ep-000001-s0/star-wr-0001/EV-INF-PRE-A09-LOCAL-BRIDGE-00.json']) JSON.parse(require('fs').readFileSync(f,'utf8')); console.log('json ok')\"",
+      "exit_code": 0,
+      "observed": "json ok"
+    },
+    {
+      "name": "STAR-WR-0001 evidence manifest verification",
+      "command": "cd qa/evidence/au-ucr-ep-000001-s0/star-wr-0001 && sha256sum -c MANIFEST.sha256",
+      "exit_code": 0,
+      "observed": [
+        "EV-STAR-00.json: OK",
+        "EV-STAR-01.json: OK",
+        "EV-STAR-02.json: OK",
+        "EV-STAR-03.json: OK",
+        "EV-STAR-04.json: OK",
+        "EV-STAR-05.json: OK",
+        "EV-INF-PRE-A09-AUTHORITY-NAMES-00.json: OK",
+        "EV-INF-PRE-A09-LOCAL-BRIDGE-00.json: OK"
+      ]
+    },
+    {
+      "name": "S0 readiness consistency and closed-transition check",
+      "command": "node scripts/qa/au-ucr-s0-readiness.mjs check",
+      "exit_code": 0,
+      "observed": "check: PACKAGE_CONSISTENT_S1_CLOSED"
+    }
+  ],
+  "readiness_conclusion": {
+    "role_names_populated": true,
+    "authority_evidence_populated": true,
+    "deterministic_checks_passed": true,
+    "s1_transition": "closed_pending_explicit_acceptance",
+    "a09_decision": "NO_DECISION_NO_TRANSITION",
+    "submission_disposition": "READY_TO_SUBMIT_AS_BLOCKED_PRE_A09_EVIDENCE_ONLY"
+  },
+  "limitations": [
+    "The checks prove internal consistency and closed-transition invariants only.",
+    "This receipt does not provide named assignments, Decision Chair acceptance, QA certification, capability certification, or execution release.",
+    "A09 submission, if performed later, must preserve this receipt as pre-submission evidence rather than as a promotion decision."
+  ],
+  "dependencies": [
+    "EV-INF-PRE-A09-AUTHORITY-NAMES-00",
+    "EV-INF-PRE-A09-LOCAL-BRIDGE-00"
+  ]
+}
