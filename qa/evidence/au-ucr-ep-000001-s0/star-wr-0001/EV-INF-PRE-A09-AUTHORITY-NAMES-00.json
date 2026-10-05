@@ -1,0 +1,160 @@
+{
+  "evidence_id": "EV-INF-PRE-A09-AUTHORITY-NAMES-00",
+  "work_request_id": "STAR-WR-0001",
+  "experiment_id": "AU-UCR-EP-000001",
+  "sprint_id": "S0",
+  "governance_stage": "PRE_A09",
+  "created_at_utc": "2026-10-05T18:20:48Z",
+  "producer": "Cursor technical executor",
+  "source": "AU-UCR-GOV-001 addendum, S0 lane register, S0 readiness gate, and existing STAR-WR-0001 receipts",
+  "claim_tested": "The PRE_A09 package names the governed roles required for A09 submission and records whether assignment-authority evidence exists for each role.",
+  "result": "BLOCKED_BY_MISSING_NAMED_ASSIGNMENTS",
+  "epistemic_state": "DIRECTLY_OBSERVED_FROM_REPOSITORY_EVIDENCE",
+  "repository": {
+    "path": "/workspace",
+    "branch": "cursor/populate-authority-readiness-7886",
+    "commit_inspected": "dd462513c4c05eb09b976e899a61c4fe456afe15",
+    "base_branch": "feat/harness-backend"
+  },
+  "governing_authority_sources": [
+    {
+      "id": "AU-UCR-GOV-001",
+      "path": "docs/experiments/au-ucr-ep-000001/AU_UCR_GOV_001_RACI_RELEASE_AUTHORITY_ADDENDUM.md",
+      "commit": "3f2dd71db76ddc89ff2dabad391665f4a381698c",
+      "authority": "Defines mandatory role-assignment fields, separation of duties, A09 governance decision authority, and execution-release authority."
+    },
+    {
+      "id": "S0_WORKTREE_LANE_REGISTER",
+      "path": "docs/experiments/au-ucr-ep-000001/S0_WORKTREE_LANE_REGISTER.yaml",
+      "authority": "Lists role lanes and currently records every owner as unassigned_role_only."
+    },
+    {
+      "id": "S0_QA_READINESS_GATE",
+      "path": "docs/experiments/au-ucr-ep-000001/S0_QA_READINESS_GATE.json",
+      "authority": "Keeps acceptance false and S1 transition closed pending explicit acceptance."
+    },
+    {
+      "id": "EV-STAR-00",
+      "path": "qa/evidence/au-ucr-ep-000001-s0/star-wr-0001/EV-STAR-00.json",
+      "authority": "Records a technical GitHub principal only and explicitly does not assign independent-review or A09 authority."
+    },
+    {
+      "id": "EV-STAR-03",
+      "path": "qa/evidence/au-ucr-ep-000001-s0/star-wr-0001/EV-STAR-03.json",
+      "authority": "Records lineage separation between canonical S0, governance, execution, and remote base commits."
+    }
+  ],
+  "required_role_names": [
+    "Publication Custodian",
+    "Coordinator/Architect",
+    "QA/Evidence Agent",
+    "Independent Reviewer",
+    "Decision Chair",
+    "Relevant implementation role",
+    "Security/Governance Agent"
+  ],
+  "role_assignment_evidence": [
+    {
+      "role_name": "Publication Custodian",
+      "assignee_name": null,
+      "stable_identity": null,
+      "assignment_authority": null,
+      "acknowledgement": null,
+      "effective_assignment_found": false,
+      "authority_to_act": false,
+      "notes": "Publication authority is defined by AU-UCR-GOV-001, but no named custodian assignment receipt is present in the inspected evidence."
+    },
+    {
+      "role_name": "Coordinator/Architect",
+      "assignee_name": null,
+      "stable_identity": null,
+      "assignment_authority": null,
+      "acknowledgement": null,
+      "effective_assignment_found": false,
+      "authority_to_act": false,
+      "notes": "Lane register owner remains unassigned_role_only; no dependency-integrity or execution-release authority receipt is present."
+    },
+    {
+      "role_name": "QA/Evidence Agent",
+      "assignee_name": null,
+      "stable_identity": null,
+      "assignment_authority": null,
+      "acknowledgement": null,
+      "effective_assignment_found": false,
+      "authority_to_act": false,
+      "notes": "Lane register owner remains unassigned_role_only; no independent QA/Evidence assignment receipt is present."
+    },
+    {
+      "role_name": "Independent Reviewer",
+      "assignee_name": null,
+      "stable_identity": null,
+      "assignment_authority": null,
+      "acknowledgement": null,
+      "effective_assignment_found": false,
+      "authority_to_act": false,
+      "notes": "No commit-specific independent-review acknowledgement or reviewer assignment receipt is present."
+    },
+    {
+      "role_name": "Decision Chair",
+      "assignee_name": null,
+      "stable_identity": null,
+      "assignment_authority": null,
+      "acknowledgement": null,
+      "effective_assignment_found": false,
+      "authority_to_act": false,
+      "notes": "No Decision Chair assignment or A09 decision receipt is present."
+    },
+    {
+      "role_name": "Relevant implementation role",
+      "assignee_name": null,
+      "stable_identity": null,
+      "assignment_authority": null,
+      "acknowledgement": null,
+      "effective_assignment_found": false,
+      "authority_to_act": false,
+      "notes": "Implementation lanes remain role placeholders until a valid assignment register names actors."
+    },
+    {
+      "role_name": "Security/Governance Agent",
+      "assignee_name": null,
+      "stable_identity": null,
+      "assignment_authority": null,
+      "acknowledgement": null,
+      "effective_assignment_found": false,
+      "authority_to_act": false,
+      "notes": "Lane register owner remains unassigned_role_only; no security/governance assignment receipt is present."
+    }
+  ],
+  "technical_names_not_treated_as_authority": [
+    {
+      "name": "Cursor technical executor",
+      "source": "STAR-WR-0001 receipts",
+      "authority_inferred": false
+    },
+    {
+      "name": "mrrobot787",
+      "source": "EV-STAR-00 authenticated GitHub principal observation",
+      "authority_inferred": false
+    },
+    {
+      "name": "hsmplc-workstat\\hakee",
+      "source": "EV-STAR-00 local OS user observation",
+      "authority_inferred": false
+    }
+  ],
+  "a09_submission_readiness": {
+    "role_names_populated": true,
+    "authority_evidence_populated": true,
+    "named_assignment_authority_complete": false,
+    "separation_of_duties_evaluable": false,
+    "decision_chair_receipt_present": false,
+    "execution_release_receipt_present": false,
+    "submission_disposition": "READY_TO_SUBMIT_AS_BLOCKED_PRE_A09_EVIDENCE_ONLY"
+  },
+  "gate_disposition": "PRE_A09_BLOCKED_NO_CERTIFICATION",
+  "limitations": [
+    "This receipt names required roles and authority evidence; it does not assign people to roles.",
+    "Technical repository access, commit authorship, operating-system user names, and executor labels are not treated as A09 authority.",
+    "No A09 promotion, governance acceptance, QA certification, or execution release is recorded by this receipt."
+  ]
+}
