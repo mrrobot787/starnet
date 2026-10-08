@@ -29,6 +29,8 @@ async function runTests() {
         }
     }
 
+    // Set environment variable for auth token to test initialization
+    process.env.STARNET_AUTH_TOKEN = 'verified-token-123';
     await auRegistryAdapter.initialize();
     await auDataBridge.initialize();
 
@@ -90,7 +92,7 @@ async function runTests() {
         assert.strictEqual(result.status, 'PENDING_REVIEW');
     });
 
-    await test('AU-T08', 'Missing or malformed schema', async () => {
+    await test('AU-T08', 'Malformed schema loading', async () => {
         const tempSchemaPath = path.join(__dirname, 'malformed_schema.json');
         await fs.writeFile(tempSchemaPath, '{ "invalid": json }');
 
@@ -113,9 +115,23 @@ async function runTests() {
     });
 
     await test('AU-T10', 'Data bridge access control', async () => {
-        const result = await auDataBridge.fetchGovernedData('unauthorized_source', 'SELECT *');
-        assert.strictEqual(result.status, 'UNAUTHORIZED');
-        assert.strictEqual(result.data, null);
+        // Test 1: Missing identity
+        const res1 = await auDataBridge.fetchGovernedData('clinical_records', 'SELECT *');
+        assert.strictEqual(res1.status, 'UNAUTHORIZED');
+
+        // Test 2: Valid identity, but no grant for the source
+        const res2 = await auDataBridge.fetchGovernedData('clinical_records', 'SELECT *', {
+            identity: 'agent-01',
+            grants: ['other_source']
+        });
+        assert.strictEqual(res2.status, 'UNAUTHORIZED');
+
+        // Test 3: Valid identity and grant
+        const res3 = await auDataBridge.fetchGovernedData('clinical_records', 'SELECT *', {
+            identity: 'agent-01',
+            grants: ['clinical_records']
+        });
+        assert.strictEqual(res3.status, 'SUCCESS');
     });
 
     await test('AU-T11', 'Source integrity', async () => {

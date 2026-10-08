@@ -7,7 +7,9 @@
     "test": "test"
   },
   "scripts": {
-    "test": "node test/integration/agents_university/au_integration.test.mjs"
+    "test": "node test/integration/agents_university/au_integration.test.mjs",
+    "test:fast": "echo 'Fast tests not implemented' && exit 0",
+    "test:http": "echo 'HTTP tests not implemented' && exit 0"
   },
   "keywords": [],
   "author": "",
