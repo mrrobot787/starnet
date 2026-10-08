@@ -15782,12 +15782,25 @@ async function handleRun(req, res) {
   try { body = JSON.parse(await readBody(req, 2 << 20, res)); }
   catch (e) { if (res.headersSent) return; res.writeHead(400); return res.end('bad json'); }   // over-limit already answered 413
   const { model, system, messages = [], agentId = 'agent', isTask = false, provider, fallbackModels, fallbackProviders } = body || {};
-  const recurring = !!(body && body.recurring);   // the browser's mint detector saw this task SHAPE before → salience boost for reflection
-  // REASON-ONLY SELF-TALK (retitle / goal-judge / pitch / autopilot): the caller composed a complete strict-format
-  // prompt and parses the raw reply. runOnce keeps that system prompt VERBATIM (no manual/capability/skill/memory
-  // dressing — which buries a "reply with ONLY a 3-6 word title" instruction and makes models answer chattily),
-  // and the away clock is never stamped for it: agent self-talk is not user presence (NS away-detection contract).
+  const recurring = !!(body && body.recurring);
   const internal = !!(body && body.internal);
+
+  // AU-MECH-003: Enforce Approval Ledger check for Agents University agents before admission.
+  if (agentId && agentId.startsWith('au-')) {
+    const approvalLedger = require('./governance/approval-ledger.js');
+    // In a real run, the definitionHash would be derived from the registered agent definition.
+    // For the admission gate, we verify if the agent is ACTIVE.
+    // Note: full version-bound hash check happens at the tool/data bridge level.
+    const entry = await approvalLedger.getApproval(agentId);
+    if (!entry || entry.status !== 'ACTIVE') {
+      res.writeHead(403, { 'Content-Type': 'application/json' });
+      return res.end(JSON.stringify({
+        error: 'UNAPPROVED_AGENT',
+        message: `Agent ${agentId} is not approved for execution. Current status: ${entry ? entry.status : 'NOT_FOUND'}`
+      }));
+    }
+  }
+
   if (!internal && agentId === 'agent') overseer.resumeReviews();
   // …and the ONE exception to that bareness (rec perfection W2): a recommendation generator asks the model what
   // this Commander should do next, so it may request the same bounded evidence pack an ordinary task run gets.

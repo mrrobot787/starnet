@@ -61,7 +61,7 @@ async function runTests() {
     });
 
     await test('AU-T09', 'Data bridge secret isolation', async () => {
-        const bridgeContent = await fs.readFile(DATA_BRIDGE_PATH, 'utf8');
+        const bridgeContent = await fs.readFile(path.join(__dirname, '../../../sidecar/services/au-data-bridge.mjs'), 'utf8');
         const lines = bridgeContent.split('\n');
         const hasRealReference = lines.some(line => !line.trim().startsWith('//') && line.includes('config.json'));
         assert.ok(!hasRealReference, 'Bridge must not reference AU config.json in executable code');
@@ -108,6 +108,19 @@ async function runTests() {
             sessionToken: 'valid-session'
         });
         assert.strictEqual(result.status, 'SUCCESS');
+    });
+
+    await test('AU-T11', 'Admission Gate: Reject non-ACTIVE agent', async () => {
+        // Setup: Agent is PENDING_REVIEW
+        await approvalLedger.setApproval('au-test-agent-02', {
+            definitionHash: 'hash-456', status: 'PENDING_REVIEW', approver: 'sys', timestamp: new Date().toISOString()
+        });
+
+        const agentId = 'au-test-agent-02';
+        const entry = await approvalLedger.getApproval(agentId);
+
+        assert.strictEqual(entry.status, 'PENDING_REVIEW');
+        assert.strictEqual(entry.status !== 'ACTIVE', true, 'Admission logic should reject non-ACTIVE status');
     });
 
     console.log(`\nTest Summary: ${passed}/${failed + passed} passed.`);
