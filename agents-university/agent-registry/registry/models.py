@@ -260,8 +260,8 @@ class AgentRegistration:
             self.metadata = Metadata(**self.metadata)
 
     def to_dict(self) -> Dict[str, Any]:
-        """Convert to dictionary"""
-        return asdict(self)
+        """Convert to dictionary, omitting unset optional fields (None) so the result validates against the schema"""
+        return asdict(self, dict_factory=lambda items: {k: v for k, v in items if v is not None})
 
     def to_json(self) -> str:
         """Convert to JSON string"""
