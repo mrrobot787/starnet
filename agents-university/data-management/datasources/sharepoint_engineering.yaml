@@ -1,0 +1,129 @@
+# SharePoint Engineering Sites - High Priority Data Source
+# Template for first-party M365 content ingestion
+
+id: sp_engineering
+name: "SharePoint Engineering Sites"
+type: sharepoint
+owner: EngOps
+system_of_record: true
+scope: "Sites/Engineering/**/*"
+
+# Legal and compliance framework
+legal:
+  basis: legitimate_interests
+  pii: possible
+  dpa: "2024-11-01"
+  license: "Internal use only - Microsoft 365 Enterprise Agreement"
+
+# Governance controls
+governance:
+  retention_days: 365
+  redaction: "pii_v2"
+  sensitivity: "Confidential"
+
+# Double Helix integration
+sissa_overlay: SISSA_ACTION_PLANNER
+double_helix_tags:
+  section: GOV  # Governance section for engineering documentation
+  strand_default: I  # Issue strand for documentation gaps
+  auto_tag_patterns:
+    - pattern: "incident|outage|failure"
+      section: SEC
+      strand: I
+    - pattern: "solution|fix|resolution"
+      section: SEC
+      strand: S
+    - pattern: "hardware|server|device"
+      section: HW
+      strand: I
+    - pattern: "software|application|code"
+      section: SW
+      strand: I
+
+# Security configuration
+security:
+  auth: aad_app_sp
+  secret_name: sp_engineering_client_secret
+  permissions:
+    - "Sites.Read.All"
+    - "Files.Read.All"
+  
+# Storage layer configuration
+destinations:
+  bronze: "lake/bronze/m365/sharepoint/engineering/"
+  silver: "lake/silver/doc2vec/engineering/"
+  gold: "lake/gold/rag_corpus/engineering/"
+  vector: "vectordb/engineering_docs"
+
+# Refresh and processing
+refresh:
+  schedule: "PT6H"  # Every 6 hours
+  mode: incremental
+  batch_size: 1000
+  
+# Quality controls
+quality:
+  min_doc_len: 400
+  max_doc_len: 50000
+  dedupe: simhash_64@0.92
+  language_filter: ["en", "en-US"]
+  exclude_patterns:
+    - "*.tmp"
+    - "~$*"
+    - "*.log"
+  
+# Content processing rules
+processing:
+  extract_metadata:
+    - author
+    - created_date
+    - modified_date
+    - file_type
+    - site_path
+    - permissions
+  
+  chunk_strategy:
+    method: semantic
+    size: 1024
+    overlap: 128
+    
+  embedding_model: "text-embedding-ada-002"
+
+# Scoring (0-5 scale for prioritization rubric)
+scoring:
+  value: 5      # High value - core engineering knowledge
+  legality: 5   # Full legal rights - internal content
+  effort: 2     # Moderate effort - Graph API mature
+  risk: 2       # Low-moderate risk - internal confidential data
+
+# Expected outputs and usage
+usage:
+  primary_purpose: rag
+  secondary_purposes: 
+    - policy
+    - eval
+  
+  target_models:
+    - engineering_assistant
+    - incident_responder
+    - knowledge_retriever
+    
+  evaluation_metrics:
+    - retrieval_accuracy
+    - answer_relevance
+    - knowledge_coverage
+
+# Monitoring and alerting
+monitoring:
+  freshness_threshold_hours: 12
+  quality_threshold_pct: 85
+  alert_channels:
+    - teams://engineering-ops
+    - email://data-platform@company.com
+    
+# Integration checkpoints
+integration:
+  cls_audit_events: true
+  sissa_event_generation: true
+  dh_tag_propagation: true
+  m365_compliance_center: true

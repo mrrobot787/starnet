@@ -1,0 +1,80 @@
+{
+  "database_path": "agent_university.db",
+  "data_lake_path": "data_lake",
+  "datasources_dir": "datasources",
+  "log_level": "INFO",
+  "safety_gates_enabled": true,
+  "double_helix_enabled": true,
+  "governance_enabled": true,
+  
+  "scoring_weights": {
+    "value_multiplier": 2.0,
+    "legality_multiplier": 2.0,
+    "effort_inverse": true,
+    "risk_inverse": true
+  },
+  
+  "safety_gates": {
+    "pii_redaction_policy": "pii_v2",
+    "secrets_scanning_enabled": true,
+    "license_checking_enabled": true,
+    "quarantine_on_secrets": true
+  },
+  
+  "double_helix": {
+    "auto_tagging_enabled": true,
+    "bidirectional_linking_enabled": true,
+    "sissa_event_generation": true
+  },
+  
+  "governance": {
+    "gdpr_compliance_enabled": true,
+    "data_retention_enforcement": true,
+    "evaluation_firewall_enabled": true,
+    "daily_compliance_checks": true
+  },
+  
+  "storage": {
+    "bronze_compression": "gzip",
+    "silver_format": "parquet",
+    "gold_format": "parquet",
+    "enable_checksums": true,
+    "enable_lineage_tracking": true
+  },
+  
+  "monitoring": {
+    "freshness_threshold_hours": 24,
+    "quality_threshold_pct": 85,
+    "compliance_threshold_pct": 95,
+    "alert_channels": [
+      "teams://data-platform",
+      "email://data-admin@company.com"
+    ]
+  },
+  
+  "integrations": {
+    "microsoft_graph": {
+      "enabled": true,
+      "tenant_id": "${AZURE_TENANT_ID}",
+      "client_id": "${AZURE_CLIENT_ID}",
+      "client_secret": "${AZURE_CLIENT_SECRET}"
+    },
+    "github": {
+      "enabled": true,
+      "app_id": "${GITHUB_APP_ID}",
+      "private_key_path": "${GITHUB_PRIVATE_KEY_PATH}"
+    },
+    "jira": {
+      "enabled": true,
+      "base_url": "${JIRA_BASE_URL}",
+      "username": "${JIRA_USERNAME}",
+      "api_token": "${JIRA_API_TOKEN}"
+    },
+    "servicenow": {
+      "enabled": true,
+      "instance_url": "${SERVICENOW_INSTANCE_URL}",
+      "username": "${SERVICENOW_USERNAME}",
+      "password": "${SERVICENOW_PASSWORD}"
+    }
+  }
+}

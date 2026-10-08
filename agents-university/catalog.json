@@ -1,0 +1,856 @@
+{
+  "format": "agents-university-catalog/v1",
+  "repo": "mrrobot787/starnet",
+  "root": "agents-university",
+  "note": "Text is hashed with LF line endings. Databases, logs, and env files are intentionally absent.",
+  "areas": [
+    {
+      "id": "training-hospital",
+      "files": 17,
+      "title": "Agent Training Hospital",
+      "summary": "Hospital roles (triage nurse, attending physician, pharmacist, CMA orchestrator), ontology, schema, policy service, pipeline integration, demos.",
+      "source": "mrrobot787/ClosedLoopSystem_AML_Ops_PitCrew (AgentHospital, services/hospital, agents/)"
+    },
+    {
+      "id": "data-management",
+      "files": 27,
+      "title": "Agent University Data Manager",
+      "summary": "Data source registry, governance framework, scoring, safety gates, storage layers, orchestrator, connector configs.",
+      "source": "mrrobot787/ClosedLoopSystem_AML_Ops_PitCrew (DataManagement)"
+    },
+    {
+      "id": "agent-registry",
+      "files": 20,
+      "title": "AML University Agent Registry",
+      "summary": "Agent registry package (models, database, API, CLI, checkpoints, monitoring, safety guards), JSON schema, examples.",
+      "source": "mrrobot787/ClosedLoopSystem_AML_Ops_PitCrew (agents/registry, schemas, examples)"
+    },
+    {
+      "id": "launchers",
+      "files": 4,
+      "title": "AML University launchers",
+      "summary": "Launcher, test runner, desktop shortcut, university.ps1 helper.",
+      "source": "mrrobot787/ClosedLoopSystem_AML_Ops_PitCrew"
+    },
+    {
+      "id": "triage-agent",
+      "files": 4,
+      "title": "Agents University triage agent",
+      "summary": "University triage agent script, tests, design doc, Streamlit dashboard.",
+      "source": "mrrobot787/AML"
+    },
+    {
+      "id": "docs",
+      "files": 5,
+      "title": "Agents University documentation",
+      "summary": "Rebranding summary, verifier architecture, engineering replication reports, execution-ready pack.",
+      "source": "mrrobot787/ClosedLoopSystem_AML_Ops_PitCrew, local drafts"
+    },
+    {
+      "id": "deploy",
+      "files": 1,
+      "title": "Deployment",
+      "summary": "nginx site config for the AML University site.",
+      "source": "mrrobot787/ClosedLoopSystem_AML_Ops_PitCrew (nginx)"
+    },
+    {
+      "id": ".",
+      "files": 1,
+      "title": "Overview",
+      "summary": "Folder map and provenance for the consolidated assets.",
+      "source": "mrrobot787/starnet"
+    }
+  ],
+  "files": [
+    {
+      "path": "README.md",
+      "area": ".",
+      "kind": "doc",
+      "title": "Agents University / AML University Training Hospital",
+      "summary": "Consolidated snapshot of the Agents University, Agent Hospital, and AML University Training Hospital assets that were previously spread across several repositories and local folders. Files were copied as-is (no git history) and deduplicated; the originals are still in place.",
+      "lines": 23,
+      "bytes": 2161,
+      "sha256": "08a8194b12cf6017c872f24efad8dfa5549bbac763a124c5a4451bf33dbb3f38"
+    },
+    {
+      "path": "agent-registry/AGENT_REGISTRY_IMPLEMENTATION_COMPLETE.md",
+      "area": "agent-registry",
+      "kind": "doc",
+      "title": "Agent Registry System - Implementation Complete ✅",
+      "summary": "The AML University Agent Registry System has been fully implemented with production-ready code, comprehensive testing, and complete documentation. This system provides hospital-metaphor governance for AI agents with wards (environments), residents (agents), instruments (tools),…",
+      "lines": 426,
+      "bytes": 11544,
+      "sha256": "8c32f102b20be19f63bfac226454d2f48e048688449e25c34e3206a3ee20e1b4"
+    },
+    {
+      "path": "agent-registry/README_AGENT_REGISTRY.md",
+      "area": "agent-registry",
+      "kind": "doc",
+      "title": "AML University Agent Registry System 🏥",
+      "summary": "Version: 1.0.0",
+      "lines": 379,
+      "bytes": 13028,
+      "sha256": "3acdbc5d0c10d6ee831bd06b434ae93c3541dea3c1aa9668ef097063af528036"
+    },
+    {
+      "path": "agent-registry/aml_university_agent_registry_schema_examples.md",
+      "area": "agent-registry",
+      "kind": "doc",
+      "title": "AML University — Agent Registry Schema & Examples",
+      "summary": "Hospital metaphor: each agent is a \"resident\" assigned to a ward (environment), with instruments (tools), a bedside manner (system prompt), and supervision levels (autonomy + guardrails). This registry lets you onboard, audit, and rotate agents safely.",
+      "lines": 285,
+      "bytes": 12861,
+      "sha256": "3da42cc91003d6270fb04202b8a3ab359f4def9fb1605da7169313e0ba1cc3b6"
+    },
+    {
+      "path": "agent-registry/examples/demo_agent_registry.py",
+      "area": "agent-registry",
+      "kind": "code",
+      "title": "Agent Registry System Demo",
+      "summary": "Demonstrates the full capabilities of the AML University Agent Registry.",
+      "lines": 324,
+      "bytes": 10275,
+      "sha256": "2448eb6c8bc647411c3d039eeef944f6b81ad500469a91abb7145b69ea6792c9"
+    },
+    {
+      "path": "agent-registry/registry/README.md",
+      "area": "agent-registry",
+      "kind": "doc",
+      "title": "AML University Agent Registry System",
+      "summary": "A comprehensive agent registry and governance system using a hospital metaphor: each AI agent is a \"resident\" assigned to a ward (environment), with instruments (tools), a bedside manner (system prompt), and supervision levels (autonomy + guardrails).",
+      "lines": 374,
+      "bytes": 10817,
+      "sha256": "9379358f176b1521d1d64427ea727b1fcfe697e3913f0168f3d25e7f0fa46445"
+    },
+    {
+      "path": "agent-registry/registry/__init__.py",
+      "area": "agent-registry",
+      "kind": "code",
+      "title": "AML University Agent Registry System",
+      "summary": "Hospital metaphor: manage agent 'residents' across wards with proper credentials, tools, autonomy levels, and guardrails.",
+      "lines": 42,
+      "bytes": 1104,
+      "sha256": "2a5f4c0617849829deacbd72f30e136036bfe722f94f005d9012c9c650e90155"
+    },
+    {
+      "path": "agent-registry/registry/api.py",
+      "area": "agent-registry",
+      "kind": "code",
+      "title": "Agent Registry REST API",
+      "summary": "FastAPI-based REST API for agent registry management.",
+      "lines": 409,
+      "bytes": 13231,
+      "sha256": "b7146b465ada2ae60d001039847509d5f53c60bc6c6e14a2c4a5e1b8f8b9222c"
+    },
+    {
+      "path": "agent-registry/registry/checkpoints.py",
+      "area": "agent-registry",
+      "kind": "code",
+      "title": "Human Checkpoint System",
+      "summary": "Enforces human-in-the-loop decision points throughout the agent registry lifecycle. This module makes the safety culture operational, not just aspirational.",
+      "lines": 569,
+      "bytes": 18170,
+      "sha256": "4c812dd9e3ca579de66d52bc90113669ccb89c82acf35215856e6fb180de1caa"
+    },
+    {
+      "path": "agent-registry/registry/cli.py",
+      "area": "agent-registry",
+      "kind": "code",
+      "title": "Agent Registry CLI",
+      "summary": "Command-line interface for managing the AML University Agent Registry.",
+      "lines": 441,
+      "bytes": 15307,
+      "sha256": "41636c52b376af1f2709751e72a5fd20fd465e3c8c4209cd8b715ebfa203a018"
+    },
+    {
+      "path": "agent-registry/registry/database.py",
+      "area": "agent-registry",
+      "kind": "code",
+      "title": "Agent Registry Database Models",
+      "summary": "SQLite database for storing agent registrations, audit logs, and runtime metrics.",
+      "lines": 471,
+      "bytes": 15072,
+      "sha256": "fa0aeb4d69bc327edb485215535ca84d7bcd37fe30c874ba7113c0f43a9017b8"
+    },
+    {
+      "path": "agent-registry/registry/mm_dashboard.py",
+      "area": "agent-registry",
+      "kind": "code",
+      "title": "M&M (Morbidity & Mortality) Review Dashboard",
+      "summary": "Monthly review dashboard for agent incidents, near-misses, and rollbacks. Inspired by medical M&M conferences where cases are reviewed for learning.",
+      "lines": 418,
+      "bytes": 14683,
+      "sha256": "080f760dbead3f69f0b288c19ca51ec4e47818113d20d479cefe734f3c3279fe"
+    },
+    {
+      "path": "agent-registry/registry/models.py",
+      "area": "agent-registry",
+      "kind": "code",
+      "title": "Agent Registry Data Models",
+      "summary": "",
+      "lines": 323,
+      "bytes": 9498,
+      "sha256": "7c75e90ec53a96ff17baea5eb56a529b7060223b4f29ade27b524fdb96b9d552"
+    },
+    {
+      "path": "agent-registry/registry/monitoring.py",
+      "area": "agent-registry",
+      "kind": "code",
+      "title": "Agent Registry Monitoring and Audit System",
+      "summary": "Real-time monitoring, metrics collection, and audit trail analysis.",
+      "lines": 357,
+      "bytes": 12186,
+      "sha256": "44687ce8f00d2ddf69ed828ea51f4ed7a652e88678dffcb0630fdee79958e0b3"
+    },
+    {
+      "path": "agent-registry/registry/observability.py",
+      "area": "agent-registry",
+      "kind": "code",
+      "title": "Observability & KPI Dashboard for Agent Registry",
+      "summary": "Tracks checkpoint funnel, policy health, and reliability metrics. Implements Ivy 4-D observability requirements.",
+      "lines": 453,
+      "bytes": 17768,
+      "sha256": "84e133226a752af044ef71d534df08ec1bf0e4f4626a7afb33ad4a8920691381"
+    },
+    {
+      "path": "agent-registry/registry/runtime.py",
+      "area": "agent-registry",
+      "kind": "code",
+      "title": "Agent Runtime Wrapper",
+      "summary": "Wraps agent execution with guardrail enforcement, audit logging, and metric collection.",
+      "lines": 388,
+      "bytes": 12041,
+      "sha256": "94d9c5fe0dec7ce4fdce80cc4cc368a880ba17742f42513a99559410d2bd13d2"
+    },
+    {
+      "path": "agent-registry/registry/safety_guards.py",
+      "area": "agent-registry",
+      "kind": "code",
+      "title": "Safety Guards - Integration Fixes for Production Readiness",
+      "summary": "Implements: 1. No-Op After Timeout guard 2. PII detection in rationales 3. Two-person rule enforcement 4. Standardized event schema",
+      "lines": 569,
+      "bytes": 17672,
+      "sha256": "a5236c97edd88c54de93e0b0d020004bf4dabec7086a43e79422e737ae8209a0"
+    },
+    {
+      "path": "agent-registry/registry/service.py",
+      "area": "agent-registry",
+      "kind": "code",
+      "title": "Agent Registry Service",
+      "summary": "High-level service for managing agent registrations with validation, database persistence, and lifecycle management.",
+      "lines": 341,
+      "bytes": 10629,
+      "sha256": "f11721466196b0f495d5fb45dd193530da6a1a62581d825992c9db293036dd48"
+    },
+    {
+      "path": "agent-registry/registry/validator.py",
+      "area": "agent-registry",
+      "kind": "code",
+      "title": "Agent Registry Validator",
+      "summary": "Validates agent registrations against the JSON schema and business rules.",
+      "lines": 223,
+      "bytes": 7841,
+      "sha256": "ab36c380d809e5b23b59bb49d2ae48a4990e7f23ecfeaa423de01b8288c86f24"
+    },
+    {
+      "path": "agent-registry/requirements_agent_registry.txt",
+      "area": "agent-registry",
+      "kind": "doc",
+      "title": "Agent Registry System Dependencies",
+      "summary": "",
+      "lines": 21,
+      "bytes": 534,
+      "sha256": "4dfdea6f70882e63639e87d1b09094765e49bea012e5b40235bc7e67e747ff87"
+    },
+    {
+      "path": "agent-registry/schemas/agent_registry_v1.json",
+      "area": "agent-registry",
+      "kind": "config",
+      "title": "AML University Agent Registry Schema",
+      "summary": "Hospital-metaphor agent registration: each agent is a 'resident' with defined environment, tools, autonomy, and guardrails",
+      "lines": 494,
+      "bytes": 11922,
+      "sha256": "f2c486aa14c8140786b2290fbd1f53b21bcae42eb2799cacd55a681cc2ee6ae1"
+    },
+    {
+      "path": "data-management/DESKTOP_SETUP_GUIDE.md",
+      "area": "data-management",
+      "kind": "doc",
+      "title": "Desktop Setup Guide - Agent University Data Management System",
+      "summary": "This guide will help you set up desktop shortcuts and automation for the Agent University Data Management System.",
+      "lines": 255,
+      "bytes": 7159,
+      "sha256": "92e5df2bd736e5158fb6afa5819a09f606a5c334d986cd796a7f5211ac6bda32"
+    },
+    {
+      "path": "data-management/IMPLEMENTATION_SUMMARY.md",
+      "area": "data-management",
+      "kind": "doc",
+      "title": "Agent University Data Management System - Implementation Summary",
+      "summary": "A complete, end-to-end data management system that makes \"all relevant data sources\" concrete, legal, and model-ready for Agent University / ClosedLoopSecuritySystem.",
+      "lines": 221,
+      "bytes": 7861,
+      "sha256": "eca793ba29de2bb03ec95c2e817a65a46f61d0412ad9d581324a82ba9c8a7319"
+    },
+    {
+      "path": "data-management/README.md",
+      "area": "data-management",
+      "kind": "doc",
+      "title": "Agent University Data Management System",
+      "summary": "A comprehensive, end-to-end data management system for Agent University / ClosedLoopSecuritySystem that makes \"all relevant data sources\" concrete, legal, and model-ready.",
+      "lines": 298,
+      "bytes": 8614,
+      "sha256": "c2d58167cab4c4d6fe31a2d4ea99eda87932762e2646346c96e9807ed4181ae6"
+    },
+    {
+      "path": "data-management/config.json",
+      "area": "data-management",
+      "kind": "config",
+      "title": "config.json",
+      "summary": "",
+      "lines": 81,
+      "bytes": 1986,
+      "sha256": "03f34ca5b942ad915d912cb5701291c1162da0c40469bfd76d1d3c3cab5ba117"
+    },
+    {
+      "path": "data-management/create_desktop_shortcut.bat",
+      "area": "data-management",
+      "kind": "script",
+      "title": "Agent University Data Management System - Desktop Shortcut Creator",
+      "summary": "",
+      "lines": 94,
+      "bytes": 4249,
+      "sha256": "bf3c51f7f68493c544028819f40ea31abfba3d541304e91b779f0764e71bbfff"
+    },
+    {
+      "path": "data-management/data_source_registry_schema.sql",
+      "area": "data-management",
+      "kind": "schema",
+      "title": "Data Source Registry Schema for Agent University / ClosedLoopSecuritySystem",
+      "summary": "",
+      "lines": 212,
+      "bytes": 8507,
+      "sha256": "b16279c6ca06f422e1d8983f9d0f1693efe393f98695f048a822afef7ad65a81"
+    },
+    {
+      "path": "data-management/datasources/cicd_pipelines.yaml",
+      "area": "data-management",
+      "kind": "config",
+      "title": "CI/CD Pipeline Logs - Failure Pattern Analysis",
+      "summary": "",
+      "lines": 252,
+      "bytes": 6190,
+      "sha256": "257782a4ebd20ab525d6ecd7c312a745bc3b64e0af9bf8b7d6f50fdca303f468"
+    },
+    {
+      "path": "data-management/datasources/cloud_audit_logs.yaml",
+      "area": "data-management",
+      "kind": "config",
+      "title": "Cloud Audit Logs - Anomaly Detection Training",
+      "summary": "",
+      "lines": 257,
+      "bytes": 6777,
+      "sha256": "045750dc3e0ce2468245cdaf207b4befac2fe10a8ed86524ee778098e7ee2251"
+    },
+    {
+      "path": "data-management/datasources/cmdb_assets.yaml",
+      "area": "data-management",
+      "kind": "config",
+      "title": "CMDB Asset Inventory - Entity Linking and Grounding",
+      "summary": "",
+      "lines": 243,
+      "bytes": 5465,
+      "sha256": "3086b54cd774cd5a2ecf87998a462f7ff48f329328c736f510596a399fb5bf4e"
+    },
+    {
+      "path": "data-management/datasources/github_org.yaml",
+      "area": "data-management",
+      "kind": "config",
+      "title": "GitHub Organization Repositories - Development Context Source",
+      "summary": "",
+      "lines": 214,
+      "bytes": 4919,
+      "sha256": "a93a0ff9502f92555facf946235706fddb7163e834da1eefb3a0a442f78a6201"
+    },
+    {
+      "path": "data-management/datasources/jira_incidents.yaml",
+      "area": "data-management",
+      "kind": "config",
+      "title": "Jira Incident Management - Critical Training Data Source",
+      "summary": "",
+      "lines": 186,
+      "bytes": 4708,
+      "sha256": "8262a7111e878089fc70563d47520b3afedd0885accc963f62ef06be6fc5f598"
+    },
+    {
+      "path": "data-management/datasources/kb_wiki.yaml",
+      "area": "data-management",
+      "kind": "config",
+      "title": "Knowledge Base Wiki - RAG Baseline",
+      "summary": "",
+      "lines": 253,
+      "bytes": 5817,
+      "sha256": "537df8c5545e853c741f12c01c89b1f8e9d96dd9cae5dc90c1624ef78338c9a2"
+    },
+    {
+      "path": "data-management/datasources/onenote_runbooks.yaml",
+      "area": "data-management",
+      "kind": "config",
+      "title": "OneNote Runbooks - Operational Knowledge Base",
+      "summary": "",
+      "lines": 208,
+      "bytes": 5201,
+      "sha256": "371bd04645e15e0f87b4b8a113d9e97634ce7d92a21015de9d01690181a3ee03"
+    },
+    {
+      "path": "data-management/datasources/sharepoint_engineering.yaml",
+      "area": "data-management",
+      "kind": "config",
+      "title": "SharePoint Engineering Sites - High Priority Data Source",
+      "summary": "",
+      "lines": 130,
+      "bytes": 2985,
+      "sha256": "5e35391ac70002eccddb68d3badb64a6eaab66e7b49321935444f11f1951d7f3"
+    },
+    {
+      "path": "data-management/datasources/siem_alerts.yaml",
+      "area": "data-management",
+      "kind": "config",
+      "title": "SIEM Alert Summaries - Critical Security Intelligence",
+      "summary": "",
+      "lines": 202,
+      "bytes": 5321,
+      "sha256": "ccf7fbabb168952eece325cc43b7b241d44f63be3739546a3050b6c53fcfb538"
+    },
+    {
+      "path": "data-management/double_helix_sissa_integration.py",
+      "area": "data-management",
+      "kind": "code",
+      "title": "Double Helix + SISSA Integration for Data Management",
+      "summary": "Integrates data ingestion with the Double Helix tagging system and SISSA overlays Key Features: - Automatic DH tag generation based on content patterns - SISSA overlay assignment and event generation - Bidirectional linking between Issues and Solutions - Audit trail integration…",
+      "lines": 617,
+      "bytes": 24887,
+      "sha256": "bcd3110d935556f55e641ab08c29bf679d119ef15c95630dd64eded393ed41dc"
+    },
+    {
+      "path": "data-management/governance_framework.py",
+      "area": "data-management",
+      "kind": "code",
+      "title": "Governance Framework for Data Management",
+      "summary": "Implements comprehensive governance, compliance, and audit capabilities Key Features: - Data Processing Agreements (DPA) tracking - PII policy enforcement with versioning - Opt-out registry for GDPR compliance - Evaluation firewall to prevent data leakage - Dataset versioning an…",
+      "lines": 718,
+      "bytes": 30501,
+      "sha256": "8fe6e97ab36372cb4295c007c3303a4b034c82a7d9726aefeaf337132858c5ef"
+    },
+    {
+      "path": "data-management/gui_framework_future.py",
+      "area": "data-management",
+      "kind": "code",
+      "title": "GUI Framework for Future Iterations",
+      "summary": "Advanced GUI components and features planned for future development This file serves as a blueprint for enhanced GUI features that will be implemented in future iterations of the Agent University Data Management System.",
+      "lines": 412,
+      "bytes": 16308,
+      "sha256": "da4ce8c09f87923ae64706427d2aed5537c7870a61c59aecdead915ad05cc869"
+    },
+    {
+      "path": "data-management/initialize_system.bat",
+      "area": "data-management",
+      "kind": "script",
+      "title": "initialize_system.bat",
+      "summary": "",
+      "lines": 8,
+      "bytes": 214,
+      "sha256": "e90523b70573ab1f837abc0e9f01d5d7bc9fb6c7081c3f188e02c1dd1263775f"
+    },
+    {
+      "path": "data-management/launch_agent_university.py",
+      "area": "data-management",
+      "kind": "code",
+      "title": "Agent University Data Management System - Desktop Launcher",
+      "summary": "Automated launcher with GUI preparation for future iterations This script provides: 1. One-click system initialization and operation 2. Automated health checks and status reporting 3. GUI framework preparation for future development 4. Desktop integration with system tray support",
+      "lines": 527,
+      "bytes": 21688,
+      "sha256": "066b59b1124bf408bc2f0ecb8929192c6ec98b00c94b154ab79bde5c0b7bd90e"
+    },
+    {
+      "path": "data-management/main_orchestrator.py",
+      "area": "data-management",
+      "kind": "code",
+      "title": "Main Data Management Orchestrator",
+      "summary": "Coordinates all components of the Agent University data management system This is the central entry point that ties together: - Data source registry and scoring - Bronze/Silver/Gold storage layers - PII redaction and security scanning - Double Helix tagging and SISSA integration…",
+      "lines": 458,
+      "bytes": 18893,
+      "sha256": "8aff4914e17a7997537e70400c4ded1a46f7304dd3303118637d3a1837343b13"
+    },
+    {
+      "path": "data-management/quick_launch.bat",
+      "area": "data-management",
+      "kind": "script",
+      "title": "quick_launch.bat",
+      "summary": "",
+      "lines": 5,
+      "bytes": 108,
+      "sha256": "83ebd89581e25c1a23ea722fcdd88444e69401adc8ade4fa6a2f2c081efdb924"
+    },
+    {
+      "path": "data-management/run_governance_checks.bat",
+      "area": "data-management",
+      "kind": "script",
+      "title": "run_governance_checks.bat",
+      "summary": "",
+      "lines": 8,
+      "bytes": 204,
+      "sha256": "0253dd8ae44fc473a554fe6f6527fe00123d758accf9466e15e8795bf1492d33"
+    },
+    {
+      "path": "data-management/safety_gates.py",
+      "area": "data-management",
+      "kind": "code",
+      "title": "Safety & Privacy Gates for Data Ingestion",
+      "summary": "Non-negotiable security and compliance controls for Agent University Components: - PII Redaction: names, emails, phone, IPs, ticket IDs → hashed or masked - Secrets Detection: reject if patterns like keys/tokens/certs match - License/Robots: only ingest third-party if license al…",
+      "lines": 679,
+      "bytes": 25703,
+      "sha256": "9edf3e3539b4e7eb38f72b5ed36583d346fda36a1cfc12a897190cfc3dc6e0c2"
+    },
+    {
+      "path": "data-management/score_data_sources.bat",
+      "area": "data-management",
+      "kind": "script",
+      "title": "score_data_sources.bat",
+      "summary": "",
+      "lines": 8,
+      "bytes": 198,
+      "sha256": "6da281b5a320f4eba8746408ed26554acd82251aaf5464554ff88b6c099a59e0"
+    },
+    {
+      "path": "data-management/scoring_system.py",
+      "area": "data-management",
+      "kind": "code",
+      "title": "Data Source Scoring and Prioritization System",
+      "summary": "Implements the 4-axis rubric for Agent University / ClosedLoopSecuritySystem Scoring Formula: priority = 2*Value + 2*Legality + Effort^-1 + Risk^-1",
+      "lines": 362,
+      "bytes": 13503,
+      "sha256": "b0b8f1c98be2ce69645592b6e69a24cf62448014ab483db80284dbceef48aab6"
+    },
+    {
+      "path": "data-management/storage_layers.py",
+      "area": "data-management",
+      "kind": "code",
+      "title": "Bronze/Silver/Gold Storage Layer Architecture",
+      "summary": "Implements Delta-style data lake without drama for Agent University Storage Strategy: - Bronze: Raw, append-only, immutable (gzip/parquet) - Silver: Cleaned + normalized; PII removed/hashed; document text extracted - Gold: Task-ready tables (features, labels, eval sets) + vector…",
+      "lines": 584,
+      "bytes": 23412,
+      "sha256": "67d15a8a55f7bcc9327a214ca4ba1c999f4835b08cb2bc50ad6a2d1cd6fe9be2"
+    },
+    {
+      "path": "deploy/nginx/aml-university-site.conf",
+      "area": "deploy",
+      "kind": "config",
+      "title": "AML University WordPress + Docker Backend Configuration",
+      "summary": "",
+      "lines": 231,
+      "bytes": 8010,
+      "sha256": "68b45c9bec85c667f44f6e72b54c8150e7b8371b3caf86f218875b55e4de2601"
+    },
+    {
+      "path": "docs/AML_UNIVERSITY_EXECUTION_READY_PACK.md",
+      "area": "docs",
+      "kind": "doc",
+      "title": "AML University — Execution-Ready Pack",
+      "summary": "Created: October 10, 2025",
+      "lines": 410,
+      "bytes": 14825,
+      "sha256": "5747317565dafd28db60b5160230064ae66349bcdff72e91a7394df34037f58a"
+    },
+    {
+      "path": "docs/AML_UNIVERSITY_TRAINING_HOSPITAL_REBRANDING_SUMMARY.md",
+      "area": "docs",
+      "kind": "doc",
+      "title": "AML University Training Hospital - Implementation Summary 🏥",
+      "summary": "Successfully transformed \"Group 1\" implementation to \"AML University Training Hospital\" with complete medical training context and branding.",
+      "lines": 124,
+      "bytes": 5666,
+      "sha256": "da1ecb21f5cea82482718ba76de4de258e71be671ad816e3c53909ea4d1ae63b"
+    },
+    {
+      "path": "docs/AML_University_Verifier_Architecture.md",
+      "area": "docs",
+      "kind": "doc",
+      "title": "AML University — Agent Registry & Verifier Architecture",
+      "summary": "This document extends the AML University agent registry to support verification-based inference scaling. It defines a framework for multi-attempt reasoning and verifier coordination, allowing agents to produce multiple candidate actions and use internal or external verifiers to…",
+      "lines": 130,
+      "bytes": 4047,
+      "sha256": "6f59d58de837c8b8eb948fafa24108da38af364034027b21f72c900ba6faa320"
+    },
+    {
+      "path": "docs/ENGINEER_GRADE_REPLICATION_REPORT.md",
+      "area": "docs",
+      "kind": "doc",
+      "title": "Engineer-Grade Replication Report",
+      "summary": "Date: 2025-09-28",
+      "lines": 624,
+      "bytes": 19604,
+      "sha256": "ea0fd704ff6eac3cfedfb6ccf57f11bc517ce99ab3e2cb94e368073f2d95877c"
+    },
+    {
+      "path": "docs/agent_university_engineering_replication_report_v_1.md",
+      "area": "docs",
+      "kind": "doc",
+      "title": "Agent University — Engineering Replication Report",
+      "summary": "Version: v1.0",
+      "lines": 338,
+      "bytes": 12893,
+      "sha256": "90e06f17d5ea7dfac5f369898020115bf1f0a3cc5e44cddcf6e166f41c0155d0"
+    },
+    {
+      "path": "launchers/aml_university_launcher.py",
+      "area": "launchers",
+      "kind": "code",
+      "title": "AML University Training Hospital - Enhanced Desktop Launcher",
+      "summary": "Complete GUI launcher for Domain Pack teaching system and all services",
+      "lines": 580,
+      "bytes": 20847,
+      "sha256": "44427c0622ee0a6be060a8fadafa6265cc4bfa0b8ce5c45e26b457e7aaa56fac"
+    },
+    {
+      "path": "launchers/aml_university_training_hospital_test_runner.py",
+      "area": "launchers",
+      "kind": "code",
+      "title": "AML University Training Hospital - Editor Integration Test Runner",
+      "summary": "Validates editor services, workspace management, and real-time collaboration Supports VS Code/Cursor integration for medical training workflows",
+      "lines": 459,
+      "bytes": 21702,
+      "sha256": "a41d636c18918ecb3b683ef92f751334105dd1bc422ef968ecc1f9dc76cd146e"
+    },
+    {
+      "path": "launchers/create_aml_university_shortcut.bat",
+      "area": "launchers",
+      "kind": "script",
+      "title": "Get the current directory",
+      "summary": "",
+      "lines": 47,
+      "bytes": 1804,
+      "sha256": "04fabd0134f14f93c5ab5fa1804b40cc0864553bef9140b8be5ba394778b1336"
+    },
+    {
+      "path": "launchers/university.ps1",
+      "area": "launchers",
+      "kind": "script",
+      "title": "AML University Pipeline - Comprehensive metrics builder with evidence logging",
+      "summary": "Runs the complete AML university pipeline: 1. Catalog build (if needed) 2. Report generation (if needed) 3. Teach-packs processing (if needed)",
+      "lines": 289,
+      "bytes": 8824,
+      "sha256": "c89be25ad8a7c13e6a391a81a5cc1a9ea0eefc3d98c2ecb87122b74f947b9cf2"
+    },
+    {
+      "path": "training-hospital/core/IMPLEMENTATION_SUMMARY.md",
+      "area": "training-hospital",
+      "kind": "doc",
+      "title": "Agent Hospital Implementation Summary",
+      "summary": "I've built a comprehensive Agent Hospital system with a Chief Medical Agent (CMA) that provides systematic, auditable, and defensible agent fleet management using your existing health/morale gradients and Double Helix + SISSA integration.",
+      "lines": 288,
+      "bytes": 12158,
+      "sha256": "526701f247134c4ac00b558858d427b895b87c4883777dfd012559c0249e35fc"
+    },
+    {
+      "path": "training-hospital/core/README.md",
+      "area": "training-hospital",
+      "kind": "doc",
+      "title": "Agent Hospital - Complete Fleet Health Management System",
+      "summary": "A comprehensive Agent Hospital system with a Chief Medical Agent (CMA) that triages, diagnoses, treats, and discharges every agent in your fleet using health/morale gradients while maintaining full auditability under SISSA + Double Helix.",
+      "lines": 390,
+      "bytes": 11135,
+      "sha256": "f33ffebf5db8de419297f5d0a754b3f657f008f0f63bba854e924143ad12363b"
+    },
+    {
+      "path": "training-hospital/core/attending_physician.py",
+      "area": "training-hospital",
+      "kind": "code",
+      "title": "Attending Physician Service - Root Cause Analysis and Treatment Planning",
+      "summary": "Performs comprehensive diagnostic assessment and selects appropriate interventions Responsibilities: - Analyze agent symptoms and metrics for root cause diagnosis - Select appropriate treatments from formulary - Set expected deltas and success criteria - Create comprehensive tre…",
+      "lines": 801,
+      "bytes": 33417,
+      "sha256": "6e58424befbcb475a4baf352ba125e8a59676f88c6e3bb8ea37f21918e824bdd"
+    },
+    {
+      "path": "training-hospital/core/cma_orchestrator.py",
+      "area": "training-hospital",
+      "kind": "code",
+      "title": "Chief Medical Agent (CMA) Orchestrator",
+      "summary": "Central coordination system for Agent Hospital operations The CMA orchestrates all clinical services following the hospital workflow: TN (Triage) → AP (Attending) → PH (Pharmacist) → LAB (Lab) → CM (Case Manager) With EB (Ethics Board) oversight at each step. Responsibilities: -…",
+      "lines": 778,
+      "bytes": 31196,
+      "sha256": "16082df48d9d80c17cdbed2b8dc3a35488091787318fd851cd82820e5d53244b"
+    },
+    {
+      "path": "training-hospital/core/hospital_ontology.yaml",
+      "area": "training-hospital",
+      "kind": "config",
+      "title": "Agent Hospital Clinical Ontology",
+      "summary": "",
+      "lines": 365,
+      "bytes": 13510,
+      "sha256": "1d2f2598b57238094324821cd2fb87e2a247faf0a7960a9e76359f7d6acd6585"
+    },
+    {
+      "path": "training-hospital/core/hospital_schema.sql",
+      "area": "training-hospital",
+      "kind": "schema",
+      "title": "Agent Hospital Database Schema",
+      "summary": "",
+      "lines": 481,
+      "bytes": 16498,
+      "sha256": "1ac061dfd26fae72421888323b264e32ba24fde4082e61b0e9a4ee67d0381f70"
+    },
+    {
+      "path": "training-hospital/core/pharmacist.py",
+      "area": "training-hospital",
+      "kind": "code",
+      "title": "Pharmacist Service - Treatment Validation and Safety Checks",
+      "summary": "Validates interventions against policy, checks contraindications, and ensures safe dosing Responsibilities: - Validate treatment parameters against safe bounds - Check contraindications for agent roles - Assess drug interactions and conflicts - Ensure compliance with governance…",
+      "lines": 622,
+      "bytes": 25597,
+      "sha256": "a448809312501dc0646ac04472592b4f92101ed3a20c1633fbe783d8d49f40a9"
+    },
+    {
+      "path": "training-hospital/core/triage_nurse.py",
+      "area": "training-hospital",
+      "kind": "code",
+      "title": "Triage Nurse Service - Fast Risk Stratification",
+      "summary": "First point of contact for agent health assessment and admission decisions Responsibilities: - Calculate triage scores from agent metrics - Determine admission necessity and urgency - Recommend appropriate ward placement - Queue agents for attending physician review",
+      "lines": 517,
+      "bytes": 20223,
+      "sha256": "e04f4d82be5e2a03c9ecc75bfa1c1ebf2dff70b08ee756f92a4a188e9b5fbef9"
+    },
+    {
+      "path": "training-hospital/integration/pipeline_hospital_integration.py",
+      "area": "training-hospital",
+      "kind": "code",
+      "title": "Pipeline Hospital Integration",
+      "summary": "Integrates the Feature Pipeline Engine with the existing Agent Hospital system for comprehensive agent health monitoring during feature development workflows.",
+      "lines": 712,
+      "bytes": 29967,
+      "sha256": "45044647dd4234e4f6a7ad600ff6d7a867777497bc79704771bd7103e0f3751c"
+    },
+    {
+      "path": "training-hospital/scripts/demo_agent_hospital.py",
+      "area": "training-hospital",
+      "kind": "code",
+      "title": "Agent Hospital System Demo",
+      "summary": "Comprehensive demonstration of the Agent Hospital capabilities",
+      "lines": 295,
+      "bytes": 11190,
+      "sha256": "7b0f18d598bcace4da1e6d3550ffe8b832829417d75ee213e0505628eb57ea17"
+    },
+    {
+      "path": "training-hospital/scripts/setup_hospital_db.py",
+      "area": "training-hospital",
+      "kind": "code",
+      "title": "Agent Hospital Database Setup",
+      "summary": "Creates the database and initializes all tables",
+      "lines": 130,
+      "bytes": 4170,
+      "sha256": "17a531f2327d0e6b031be4f507e4ca26f30dd8ad3921208ffaf8b434c7772093"
+    },
+    {
+      "path": "training-hospital/scripts/simple_hospital_test.py",
+      "area": "training-hospital",
+      "kind": "code",
+      "title": "Simple Agent Hospital System Test",
+      "summary": "Basic test to verify the Agent Hospital system works",
+      "lines": 158,
+      "bytes": 5222,
+      "sha256": "920982d90e791d99fe5ef4954d111a55b61710fc89c6d4873f72da95e38321fb"
+    },
+    {
+      "path": "training-hospital/scripts/test_agent_hospital.py",
+      "area": "training-hospital",
+      "kind": "test",
+      "title": "Agent Hospital System Test",
+      "summary": "Simple test to verify the Agent Hospital system is working correctly",
+      "lines": 184,
+      "bytes": 6820,
+      "sha256": "4bdeb910f47b7d6d77deadfcb0fb97bfda086145b0773d2158d0b9ddff772b1b"
+    },
+    {
+      "path": "training-hospital/service/__init__.py",
+      "area": "training-hospital",
+      "kind": "code",
+      "title": "Hospital service package",
+      "summary": "",
+      "lines": 2,
+      "bytes": 27,
+      "sha256": "dfa64cee2b792e9722b339feab782d0cdf085e6375ede8c33ac5091c5a3a83c9"
+    },
+    {
+      "path": "training-hospital/service/app.py",
+      "area": "training-hospital",
+      "kind": "code",
+      "title": "app.py",
+      "summary": "",
+      "lines": 60,
+      "bytes": 1955,
+      "sha256": "719adb0d8dc0128ef055a05d09e961eb1b73d93cb86dba76ac160b2ad88d6f8f"
+    },
+    {
+      "path": "training-hospital/service/middleware.py",
+      "area": "training-hospital",
+      "kind": "code",
+      "title": "middleware.py",
+      "summary": "",
+      "lines": 20,
+      "bytes": 693,
+      "sha256": "09a48a5628216c89052b80e8f784e13c3009afb37fe092aeb86f52ea94130fb7"
+    },
+    {
+      "path": "training-hospital/service/policy.py",
+      "area": "training-hospital",
+      "kind": "code",
+      "title": "policy.py",
+      "summary": "",
+      "lines": 31,
+      "bytes": 1158,
+      "sha256": "e9300465b585dc5458ee9996fcabebdeece2c39e3bb26b50f7fce37a0e42c5ef"
+    },
+    {
+      "path": "triage-agent/University_Triage_Agent.md",
+      "area": "triage-agent",
+      "kind": "doc",
+      "title": "University Triage Agent",
+      "summary": "This agent reads the latest University \"next steps\" request and emits a prioritized analysis with actionable recommendations.",
+      "lines": 17,
+      "bytes": 774,
+      "sha256": "90860f25f4f6684ccb4b580b2e5fdbb17655b550db6ca27e0bf642a5a2d388e6"
+    },
+    {
+      "path": "triage-agent/agent_university_dashboard.py",
+      "area": "triage-agent",
+      "kind": "code",
+      "title": "Agent University Dashboard",
+      "summary": "------------------------- This Streamlit application provides an interactive dashboard for visualizing key performance indicators (KPIs) for a university. The design is inspired by a typical executive dashboard: summary statistics are presented in columns at the top of the page,…",
+      "lines": 439,
+      "bytes": 16883,
+      "sha256": "5b1a17aa074e7c07e11f73f8b4b938e97b1aafb9f188d9f8e8abf5e461610623"
+    },
+    {
+      "path": "triage-agent/agents_university_triage.py",
+      "area": "triage-agent",
+      "kind": "code",
+      "title": "Summary: Read the University \"next steps\" request and emit a prioritized triage analysis",
+      "summary": "Contracts: - Inputs: - .mm-out/agents/requests/university_next_steps_request.json (optional) - Outputs: - .mm-out/agents/triage/university_next_steps_analysis.json (analysis with recommendations) - .mm-out/agents/evidence.jsonl (append-only; kind: university_next_steps_analyzed)…",
+      "lines": 218,
+      "bytes": 7761,
+      "sha256": "dbc899ca8f77137b36bcea4424429c4640e51752687df02b7f827410e6d2cd34"
+    },
+    {
+      "path": "triage-agent/tests/test_agents_university_triage.py",
+      "area": "triage-agent",
+      "kind": "test",
+      "title": "test_agents_university_triage.py",
+      "summary": "",
+      "lines": 52,
+      "bytes": 2160,
+      "sha256": "d4feebe47fc69bbe7ef13bf36bcbd79571d35b62023e4028dedf23a8d4187d20"
+    }
+  ]
+}

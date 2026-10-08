@@ -1,0 +1,252 @@
+# Knowledge Base Wiki - RAG Baseline
+# Foundational knowledge corpus for general assistance
+
+id: kb_wiki
+name: "Knowledge Base Wiki (Confluence/SharePoint)"
+type: wiki
+owner: KnowledgeManagement
+system_of_record: true
+scope: "spaces:all pages:published status:current"
+
+# Legal and compliance framework
+legal:
+  basis: legitimate_interests
+  pii: possible  # Author names, some user examples
+  dpa: "2024-11-01"
+  license: "Internal use only - Confluence/SharePoint Enterprise"
+
+# Governance controls
+governance:
+  retention_days: 1095  # 3 years for knowledge articles
+  redaction: "pii_v2"
+  sensitivity: "Internal"
+
+# Double Helix integration
+sissa_overlay: SISSA_ACTION_PLANNER
+double_helix_tags:
+  section: GOV  # Governance/knowledge management
+  strand_default: S  # Wiki articles are solutions/knowledge
+  auto_tag_patterns:
+    - pattern: "how.to|tutorial|guide|instructions"
+      section: GOV
+      strand: S
+    - pattern: "troubleshooting|problem|issue|error"
+      section: GEN
+      strand: I
+    - pattern: "hardware|server|device|equipment"
+      section: HW
+      strand: S
+    - pattern: "software|application|system|tool"
+      section: SW
+      strand: S
+    - pattern: "network|connectivity|internet|vpn"
+      section: NET
+      strand: S
+    - pattern: "security|password|access|permissions"
+      section: SEC
+      strand: S
+    - pattern: "policy|procedure|standard|compliance"
+      section: GOV
+      strand: S
+
+# Security configuration
+security:
+  auth: aad_app_sp
+  secret_name: confluence_app_password
+  permissions:
+    - "Content.Read"
+    - "Space.Read"
+  
+# Storage layer configuration
+destinations:
+  bronze: "lake/bronze/confluence/wiki/pages/"
+  silver: "lake/silver/knowledge/structured/"
+  gold: "lake/gold/rag_corpus/knowledge_base/"
+  vector: "vectordb/wiki_knowledge"
+
+# Refresh and processing
+refresh:
+  schedule: "PT8H"  # Every 8 hours
+  mode: incremental
+  batch_size: 1000
+  
+# Quality controls
+quality:
+  min_doc_len: 300   # Articles should have substance
+  max_doc_len: 25000
+  dedupe: content_similarity@0.90
+  language_filter: ["en", "en-US"]
+  exclude_patterns:
+    - "draft*"
+    - "*template*"
+    - "sandbox*"
+    - "*test*"
+  
+# Content processing rules
+processing:
+  extract_metadata:
+    - page_id
+    - title
+    - space_key
+    - space_name
+    - author
+    - created_date
+    - last_modified_date
+    - last_modified_by
+    - version
+    - labels
+    - parent_page
+    - page_type
+    - view_count
+    - like_count
+    - comment_count
+  
+  # Special processing for wiki content
+  content_analysis:
+    - extract_headings: true
+    - parse_tables: true
+    - extract_code_blocks: true
+    - identify_links: true
+    - parse_lists: true
+    - extract_images_alt_text: true
+    
+  knowledge_structuring:
+    - identify_procedures: true
+    - extract_definitions: true
+    - find_examples: true
+    - parse_faqs: true
+    - identify_prerequisites: true
+    
+  chunk_strategy:
+    method: semantic_sections
+    preserve_headings: true
+    maintain_context: true
+    chunk_size: 1024
+    overlap: 128
+    
+  embedding_model: "text-embedding-ada-002"
+
+# Scoring (0-5 scale for prioritization rubric)
+scoring:
+  value: 4      # High value - foundational knowledge
+  legality: 5   # Full legal rights - internal wiki
+  effort: 2     # Low effort - Confluence API mature
+  risk: 1       # Very low risk - internal knowledge base
+
+# Expected outputs and usage
+usage:
+  primary_purpose: rag
+  secondary_purposes: 
+    - eval
+    - policy
+  
+  target_models:
+    - general_assistant
+    - knowledge_retriever
+    - help_desk_bot
+    
+  use_cases:
+    - general_questions
+    - how_to_guidance
+    - policy_clarification
+    - troubleshooting_basics
+    - onboarding_support
+    
+  evaluation_metrics:
+    - answer_accuracy
+    - knowledge_coverage
+    - retrieval_precision
+    - user_satisfaction
+
+# Special handling for wiki content
+wiki_processing:
+  content_types:
+    - how_to_guides
+    - troubleshooting_articles
+    - policy_documents
+    - faq_pages
+    - glossary_entries
+    - best_practices
+    - templates
+    
+  quality_indicators:
+    - recent_updates: true
+    - high_view_count: true
+    - positive_feedback: true
+    - expert_authored: true
+    - well_structured: true
+    
+  link_analysis:
+    - internal_references: true
+    - broken_link_detection: true
+    - popular_pages: true
+    - orphaned_content: true
+
+# Content categorization
+categorization:
+  by_audience:
+    - end_users
+    - administrators
+    - developers
+    - managers
+    - new_employees
+    
+  by_topic:
+    - it_support
+    - hr_policies
+    - security_procedures
+    - business_processes
+    - technical_documentation
+    
+  by_complexity:
+    - basic
+    - intermediate
+    - advanced
+    - expert
+
+# Knowledge graph integration
+knowledge_graph:
+  entity_extraction:
+    - topics
+    - procedures
+    - systems
+    - roles
+    - policies
+    
+  relationship_mapping:
+    - related_articles
+    - prerequisite_knowledge
+    - dependent_procedures
+    - policy_hierarchies
+    
+# Content freshness tracking
+freshness_tracking:
+  staleness_indicators:
+    - last_modified_age: "P180D"  # 6 months
+    - low_recent_views: true
+    - outdated_screenshots: true
+    - broken_references: true
+    
+  update_priorities:
+    - high_traffic_pages: 1
+    - critical_procedures: 1
+    - security_policies: 1
+    - general_knowledge: 2
+    - archived_content: 3
+
+# Monitoring and alerting
+monitoring:
+  freshness_threshold_hours: 24
+  quality_threshold_pct: 85
+  content_staleness_threshold_days: 180
+  alert_channels:
+    - teams://knowledge-management
+    - email://wiki-admin@company.com
+    
+# Integration checkpoints
+integration:
+  cls_audit_events: true
+  sissa_event_generation: true
+  dh_tag_propagation: true
+  content_lifecycle_tracking: true
+  user_feedback_integration: true

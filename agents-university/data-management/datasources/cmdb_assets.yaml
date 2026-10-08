@@ -1,0 +1,242 @@
+# CMDB Asset Inventory - Entity Linking and Grounding
+# Critical for contextualizing incidents and changes
+
+id: cmdb_assets
+name: "CMDB Asset Inventory"
+type: cmdb
+owner: ITAssetManagement
+system_of_record: true
+scope: "assets:all status:active,maintenance relationships:all"
+
+# Legal and compliance framework
+legal:
+  basis: legitimate_interests
+  pii: none  # Asset data typically doesn't contain PII
+  dpa: "2024-11-01"
+  license: "Internal use only - ServiceNow Enterprise Agreement"
+
+# Governance controls
+governance:
+  retention_days: 2555  # 7 years for asset lifecycle
+  redaction: "none"  # No PII expected in asset data
+  sensitivity: "Confidential"
+
+# Double Helix integration
+sissa_overlay: SISSA_DECISION_SUPPORT
+double_helix_tags:
+  section: HW  # Hardware/assets primary
+  strand_default: I  # Assets as configuration items
+  auto_tag_patterns:
+    - pattern: "server|compute|cpu|memory|storage"
+      section: HW
+      strand: I
+    - pattern: "network|switch|router|firewall|load.balancer"
+      section: NET
+      strand: I
+    - pattern: "software|application|license|database"
+      section: SW
+      strand: I
+    - pattern: "security|endpoint|antivirus|encryption"
+      section: SEC
+      strand: I
+    - pattern: "virtual|cloud|container|kubernetes"
+      section: HW
+      strand: I
+    - pattern: "policy|compliance|governance|standard"
+      section: GOV
+      strand: I
+
+# Security configuration
+security:
+  auth: oauth2_service_account
+  secret_name: servicenow_oauth_token
+  permissions:
+    - "cmdb.read"
+    - "asset.read"
+    - "relationship.read"
+  
+# Storage layer configuration
+destinations:
+  bronze: "lake/bronze/servicenow/cmdb/assets/"
+  silver: "lake/silver/assets/normalized/"
+  gold: "lake/gold/entity_linking/asset_graph/"
+  vector: "vectordb/asset_knowledge"
+
+# Refresh and processing
+refresh:
+  schedule: "PT6H"  # Every 6 hours
+  mode: incremental
+  batch_size: 5000
+  
+# Quality controls
+quality:
+  min_doc_len: 50    # Asset records are structured
+  max_doc_len: 5000
+  dedupe: asset_id   # Assets should be unique by ID
+  required_fields:
+    - asset_id
+    - asset_class
+    - name
+    - status
+    - location
+    - owner
+  
+# Content processing rules
+processing:
+  extract_metadata:
+    - asset_id
+    - asset_class
+    - asset_type
+    - name
+    - description
+    - status
+    - location
+    - owner
+    - cost_center
+    - vendor
+    - model
+    - serial_number
+    - ip_address
+    - mac_address
+    - operating_system
+    - installed_software
+    - last_discovered
+    - warranty_expiry
+    - lifecycle_stage
+  
+  # Special processing for asset relationships
+  relationship_mapping:
+    - parent_child_relationships: true
+    - dependency_mapping: true
+    - service_mapping: true
+    - location_hierarchy: true
+    - ownership_chains: true
+    
+  # Entity linking preparation
+  entity_standardization:
+    - normalize_asset_names: true
+    - standardize_locations: true
+    - clean_ip_addresses: true
+    - normalize_software_versions: true
+    
+  chunk_strategy:
+    method: asset_record  # Keep asset records intact
+    include_relationships: true
+    preserve_hierarchy: true
+    
+# Scoring (0-5 scale for prioritization rubric)
+scoring:
+  value: 4      # High value - critical for entity linking
+  legality: 5   # Full legal rights - internal asset data
+  effort: 3     # Moderate effort - ServiceNow APIs well documented
+  risk: 1       # Very low risk - no PII, operational data
+
+# Expected outputs and usage
+usage:
+  primary_purpose: rag
+  secondary_purposes: 
+    - policy
+    - eval
+  
+  target_models:
+    - asset_advisor
+    - incident_contextualizer
+    - change_impact_analyzer
+    
+  use_cases:
+    - asset_identification
+    - dependency_analysis
+    - impact_assessment
+    - compliance_checking
+    - capacity_planning
+    
+  evaluation_metrics:
+    - entity_linking_accuracy
+    - relationship_completeness
+    - asset_identification_precision
+
+# Special handling for CMDB data
+cmdb_processing:
+  relationship_types:
+    - "runs_on"
+    - "depends_on"
+    - "connects_to"
+    - "hosted_on"
+    - "uses"
+    - "manages"
+    - "owns"
+    
+  asset_classifications:
+    - hardware
+    - software
+    - network
+    - security
+    - virtual
+    - cloud
+    - service
+    
+  lifecycle_stages:
+    - planning
+    - development
+    - testing
+    - production
+    - maintenance
+    - retirement
+    
+# Entity linking configuration
+entity_linking:
+  primary_identifiers:
+    - asset_id
+    - name
+    - serial_number
+    - ip_address
+    - mac_address
+    
+  fuzzy_matching:
+    - asset_names: true
+    - locations: true
+    - models: true
+    
+  relationship_inference:
+    - network_topology: true
+    - application_dependencies: true
+    - service_mappings: true
+
+# Graph database integration
+graph_config:
+  node_types:
+    - Asset
+    - Location
+    - Owner
+    - Service
+    - Application
+    
+  edge_types:
+    - DEPENDS_ON
+    - RUNS_ON
+    - CONNECTS_TO
+    - LOCATED_AT
+    - OWNED_BY
+    
+  indexing:
+    - asset_id
+    - name
+    - ip_address
+    - location
+    
+# Monitoring and alerting
+monitoring:
+  freshness_threshold_hours: 12
+  quality_threshold_pct: 95
+  relationship_completeness_threshold: 85
+  alert_channels:
+    - teams://asset-management
+    - email://cmdb-admin@company.com
+    
+# Integration checkpoints
+integration:
+  cls_audit_events: true
+  sissa_event_generation: true
+  dh_tag_propagation: true
+  asset_discovery_correlation: true
+  service_mapping_integration: true
