@@ -238,6 +238,9 @@ class AgentRegistryService:
         if not agent:
             return False, [f"Agent not found: {agent_id}"]
 
+        previous_environment = agent.environment.name
+        previous_version = agent.version
+
         # Update environment and tools
         agent.environment.name = new_environment
         agent.tools = [Tool(**t) if isinstance(t, dict) else t for t in new_tools]
@@ -252,16 +255,24 @@ class AgentRegistryService:
             agent.metadata.updated_at = datetime.utcnow().isoformat()
 
         # Validate the rotated configuration
-        is_valid, errors = self.validator.validate(agent.to_dict())
+        rotated = agent.to_dict()
+        is_valid, errors = self.validator.validate(rotated)
         if not is_valid:
             return False, errors
 
-        # Log the rotation
+        # Persist before reporting success; the audit row records only a stored rotation
+        try:
+            self.db.update_registration(rotated)
+        except Exception as e:
+            return False, [f"Database error: {str(e)}"]
+
         self.db.log_audit_event(
             agent_id,
             'rotation',
             {
+                'previous_environment': previous_environment,
                 'new_environment': new_environment,
+                'previous_version': previous_version,
                 'new_version': agent.version
             },
             user

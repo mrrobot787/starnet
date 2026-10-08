@@ -267,6 +267,39 @@ class AgentRegistryDB:
         
         self.log_audit_event(agent_id, 'status_change', {'new_status': status}, user)
 
+    def update_registration(self, registration_data: Dict[str, Any]):
+        """
+        Persist an updated registration for an existing agent.
+
+        Rewrites the stored JSON payload and keeps the denormalized columns
+        (title, version, owner, environment_name, autonomy_level) in sync with it,
+        so filters such as list_agents(environment=...) see the new state.
+
+        Raises:
+            LookupError: if no registration exists for the agent_id
+        """
+        cursor = self.conn.cursor()
+        cursor.execute("""
+            UPDATE agent_registrations
+            SET title = ?, version = ?, owner_unit = ?, owner_contact = ?,
+                environment_name = ?, autonomy_level = ?, registration_data = ?,
+                updated_at = CURRENT_TIMESTAMP
+            WHERE agent_id = ?
+        """, (
+            registration_data['title'],
+            registration_data['version'],
+            registration_data['owner']['unit'],
+            registration_data['owner']['contact'],
+            registration_data['environment']['name'],
+            registration_data['autonomy']['level'],
+            json.dumps(registration_data),
+            registration_data['agent_id']
+        ))
+        if cursor.rowcount != 1:
+            self.conn.rollback()
+            raise LookupError(f"Agent not found: {registration_data['agent_id']}")
+        self.conn.commit()
+
     def log_audit_event(
         self,
         agent_id: str,
