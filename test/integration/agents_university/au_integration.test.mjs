@@ -2,10 +2,13 @@ import assert from 'assert';
 import path from 'path';
 import fs from 'fs/promises';
 import { pathToFileURL } from 'url';
+import { fileURLToPath } from 'url';
 
-const REGISTRY_ADAPTER_PATH = pathToFileURL('C:/Users/hakee/AppData/Local/StarNet/sidecar/agents/au-registry-adapter.mjs').href;
-const DATA_BRIDGE_PATH = pathToFileURL('C:/Users/hakee/AppData/Local/StarNet/sidecar/services/au-data-bridge.mjs').href;
-const DATA_BRIDGE_SYSTEM_PATH = 'C:/Users/hakee/AppData/Local/StarNet/sidecar/services/au-data-bridge.mjs';
+// Resolve paths relative to the current file to remove absolute Windows paths
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const REGISTRY_ADAPTER_PATH = pathToFileURL(path.join(__dirname, '../../../sidecar/agents/au-registry-adapter.mjs')).href;
+const DATA_BRIDGE_PATH = pathToFileURL(path.join(__dirname, '../../../sidecar/services/au-data-bridge.mjs')).href;
+const DATA_BRIDGE_SYSTEM_PATH = path.join(__dirname, '../../../sidecar/services/au-data-bridge.mjs');
 
 const { auRegistryAdapter } = await import(REGISTRY_ADAPTER_PATH);
 const { auDataBridge } = await import(DATA_BRIDGE_PATH);
@@ -88,11 +91,18 @@ async function runTests() {
     });
 
     await test('AU-T08', 'Missing or malformed schema', async () => {
+        const tempSchemaPath = path.join(__dirname, 'malformed_schema.json');
+        await fs.writeFile(tempSchemaPath, '{ "invalid": json }');
+
         const BrokenAdapter = class extends (auRegistryAdapter.constructor) {
-            async initialize() { throw new Error('FILE_NOT_FOUND'); }
+            async initialize() {
+                const data = await fs.readFile(tempSchemaPath, 'utf8');
+                JSON.parse(data);
+            }
         };
         const broken = new BrokenAdapter();
-        await assert.rejects(async () => await broken.initialize(), /FILE_NOT_FOUND/);
+        await assert.rejects(async () => await broken.initialize(), /SyntaxError/);
+        await fs.unlink(tempSchemaPath);
     });
 
     await test('AU-T09', 'Data bridge secret isolation', async () => {
@@ -104,11 +114,12 @@ async function runTests() {
 
     await test('AU-T10', 'Data bridge access control', async () => {
         const result = await auDataBridge.fetchGovernedData('unauthorized_source', 'SELECT *');
-        assert.strictEqual(result.status, 'SUCCESS');
+        assert.strictEqual(result.status, 'UNAUTHORIZED');
+        assert.strictEqual(result.data, null);
     });
 
     await test('AU-T11', 'Source integrity', async () => {
-        const schemaPath = 'C:/Users/hakee/AppData/Local/StarNet/shared/schemas/au_agent_v1.json';
+        const schemaPath = path.join(__dirname, '../../../shared/schemas/au_agent_v1.json');
         const content = await fs.readFile(schemaPath, 'utf8');
         assert.ok(content.includes('AML University Agent Registry Schema'));
     });

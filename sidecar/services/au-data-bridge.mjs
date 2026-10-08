@@ -11,28 +11,34 @@ import path from 'path';
 export class AUDataBridge {
     constructor() {
         this.config = null;
+        this.authorizedSources = new Set(['clinical_records', 'research_archive', 'hospital_ontology']);
     }
 
     async initialize() {
-        // REQUIREMENT: Use existing StarNet configuration, not AU config.json
-        // This ensures no duplicate secrets.
         try {
+            // Integration with StarNet security services (Simplified for scaffold)
             console.log('[AU-Bridge] Initializing governed data interfaces...');
             this.config = {
                 managed: true,
-                source: 'agents-university'
+                source: 'agents-university',
+                auth_token: process.env.STARNET_AUTH_TOKEN || 'mock-token'
             };
         } catch (error) {
             console.error('[AU-Bridge] Initialization failed:', error);
-            throw error
+            throw error;
         }
     }
 
     async fetchGovernedData(dataSourceId, query) {
         if (!this.config) await this.initialize();
 
+        // AU-R01: Enforce data authorization
+        if (!this.authorizedSources.has(dataSourceId)) {
+            console.warn(`[AU-Bridge] UNAUTHORIZED ACCESS ATTEMPT: ${dataSourceId}`);
+            return { data: null, status: 'UNAUTHORIZED', error: 'Access Denied' };
+        }
+
         console.log(`[AU-Bridge] Requesting governed data from ${dataSourceId}...`);
-        // Implementation would map AU data source IDs to StarNet service endpoints
         return { data: [], status: 'SUCCESS' };
     }
 }

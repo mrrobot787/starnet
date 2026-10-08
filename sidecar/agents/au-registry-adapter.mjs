@@ -2,6 +2,7 @@ import fs from 'fs/promises';
 import path from 'path';
 import Ajv from 'ajv';
 import addFormats from 'ajv-formats';
+import { fileURLToPath } from 'url';
 
 /**
  * AU Registry Adapter
@@ -13,8 +14,9 @@ import addFormats from 'ajv-formats';
 const ajv = new Ajv({ allErrors: true, strict: false });
 addFormats(ajv);
 
-// FIX: Use absolute path to avoid process.cwd() ambiguity during tests
-const SCHEMA_PATH = 'C:/Users/hakee/AppData/Local/StarNet/shared/schemas/au_agent_v1.json';
+// FIX: Use relative path based on the current module location to avoid absolute paths
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const SCHEMA_PATH = path.join(__dirname, '../../shared/schemas/au_agent_v1.json');
 
 export class AURegistryAdapter {
     constructor() {
