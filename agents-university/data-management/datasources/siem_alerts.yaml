@@ -1,0 +1,201 @@
+# SIEM Alert Summaries - Critical Security Intelligence
+# High-value classification and deduplication training data
+
+id: siem_alerts
+name: "SIEM Alert Summaries (Sentinel/Splunk)"
+type: siem
+owner: SecOps
+system_of_record: true
+scope: "alerts:resolved AND severity:(high,critical) AND -status:false_positive"
+
+# Legal and compliance framework
+legal:
+  basis: legitimate_interests
+  pii: possible  # Alert descriptions may contain user/system info
+  dpa: "2024-11-01"
+  license: "Internal use only - Security Operations"
+
+# Governance controls
+governance:
+  retention_days: 2555  # 7 years for security incidents
+  redaction: "pii_v2_security"  # Special security-aware redaction
+  sensitivity: "Restricted"
+
+# Double Helix integration
+sissa_overlay: SISSA_RISK_VALIDATOR
+double_helix_tags:
+  section: SEC  # Security section primary
+  strand_default: I  # Alerts are security issues
+  auto_tag_patterns:
+    - pattern: "resolved|mitigated|closed"
+      section: SEC
+      strand: S  # Resolutions are solutions
+    - pattern: "malware|virus|trojan|ransomware"
+      section: SEC
+      strand: I
+    - pattern: "network|firewall|intrusion|ddos"
+      section: NET
+      strand: I
+    - pattern: "endpoint|host|device|workstation"
+      section: HW
+      strand: I
+    - pattern: "application|software|service|web"
+      section: SW
+      strand: I
+    - pattern: "policy|compliance|governance|audit"
+      section: GOV
+      strand: I
+
+# Security configuration
+security:
+  auth: service_principal
+  secret_name: siem_service_principal_secret
+  permissions:
+    - "SecurityEvents.Read.All"
+    - "SecurityAlerts.Read.All"
+  
+# Storage layer configuration
+destinations:
+  bronze: "lake/bronze/security/siem/alerts/"
+  silver: "lake/silver/security/classified_alerts/"
+  gold: "lake/gold/training/alert_classification/"
+  vector: "vectordb/security_intelligence"
+
+# Refresh and processing
+refresh:
+  schedule: "PT1H"  # Every hour for security data
+  mode: incremental
+  batch_size: 2000
+  lookback_hours: 2  # Check for updates in last 2 hours
+  
+# Quality controls
+quality:
+  min_doc_len: 50   # Shorter for structured alert data
+  max_doc_len: 5000
+  dedupe: alert_signature  # Custom dedup for alerts
+  required_fields:
+    - alert_id
+    - severity
+    - status
+    - created_time
+    - resolved_time
+    - alert_type
+    - description
+  
+# Content processing rules
+processing:
+  extract_metadata:
+    - alert_id
+    - alert_type
+    - severity
+    - status
+    - source_system
+    - affected_entities
+    - created_time
+    - resolved_time
+    - time_to_resolution
+    - analyst_assigned
+    - resolution_category
+    - false_positive_flag
+    - escalation_level
+  
+  # Special processing for security classification
+  security_classification:
+    - threat_category
+    - attack_vector
+    - confidence_score
+    - impact_assessment
+    - remediation_actions
+    
+  feature_engineering:
+    - time_to_resolution_minutes
+    - business_hours_flag
+    - severity_numeric
+    - entity_count
+    - similar_alert_frequency
+    
+  chunk_strategy:
+    method: structured  # Keep alert records intact
+    preserve_alert_context: true
+    
+# Scoring (0-5 scale for prioritization rubric)
+scoring:
+  value: 5      # Extremely high value - security classification training
+  legality: 5   # Full legal rights - internal security operations
+  effort: 4     # Higher effort - SIEM APIs can be complex
+  risk: 4       # Higher risk - sensitive security data
+
+# Expected outputs and usage
+usage:
+  primary_purpose: ft  # Fine-tuning for alert classification
+  secondary_purposes: 
+    - eval
+    - rag
+  
+  target_models:
+    - alert_classifier
+    - threat_detector
+    - false_positive_predictor
+    - escalation_recommender
+    
+  training_objectives:
+    - alert_severity_classification
+    - threat_type_identification
+    - false_positive_detection
+    - resolution_time_prediction
+    - escalation_decision_support
+    
+  evaluation_metrics:
+    - classification_accuracy
+    - false_positive_rate
+    - threat_detection_recall
+    - escalation_precision
+
+# Special handling for security data
+security_processing:
+  threat_intelligence_enrichment: true
+  ioc_extraction: true  # Indicators of Compromise
+  
+  anonymization_rules:
+    - hash_ip_addresses: true
+    - mask_user_accounts: true
+    - redact_system_names: partial  # Keep some context
+    
+  correlation_analysis:
+    - link_related_alerts
+    - identify_attack_campaigns
+    - track_threat_actor_patterns
+
+# Alert-specific configuration
+alert_config:
+  severity_mapping:
+    critical: 4
+    high: 3
+    medium: 2
+    low: 1
+    informational: 0
+  
+  status_filter:
+    include: ["resolved", "closed", "mitigated"]
+    exclude: ["false_positive", "duplicate", "test"]
+    
+  time_window:
+    min_resolution_time: "PT5M"  # At least 5 minutes
+    max_resolution_time: "P30D"  # At most 30 days
+    
+# Monitoring and alerting
+monitoring:
+  freshness_threshold_hours: 2
+  quality_threshold_pct: 95  # High bar for security data
+  false_positive_rate_threshold: 5  # Alert if FP rate > 5%
+  alert_channels:
+    - teams://secops-alerts
+    - pagerduty://security-platform
+    
+# Integration checkpoints
+integration:
+  cls_audit_events: true
+  sissa_event_generation: true
+  dh_tag_propagation: true
+  threat_intel_correlation: true
+  incident_response_integration: true

@@ -1,0 +1,20 @@
+# Agent Registry System Dependencies
+
+# Core dependencies
+jsonschema>=4.19.0      # JSON schema validation
+tabulate>=0.9.0         # CLI table formatting
+
+# API dependencies
+fastapi>=0.104.0        # REST API framework
+uvicorn>=0.24.0         # ASGI server
+pydantic>=2.4.0         # Data validation
+
+# Database
+# SQLite is built into Python, no extra dependency needed
+
+# Testing
+pytest>=7.4.0           # Testing framework
+pytest-cov>=4.1.0       # Coverage reporting
+
+# Optional: for better datetime handling
+python-dateutil>=2.8.2
