@@ -30,7 +30,7 @@ class AgentValidator:
         """
         if schema_path is None:
             # Default to schema in project
-            schema_path = Path(__file__).parent.parent.parent / "schemas" / "agent_registry_v1.json"
+            schema_path = Path(__file__).parent.parent / "schemas" / "agent_registry_v1.json"
         
         self.schema_path = Path(schema_path)
         self.schema = self._load_schema()
