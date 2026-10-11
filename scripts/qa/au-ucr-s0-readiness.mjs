@@ -408,6 +408,8 @@ function check() {
     'qa/evidence/au-ucr-ep-000001-s0/baseline/route-gate-inventory.json',
     'qa/evidence/au-ucr-ep-000001-s0/baseline/flag-code-search.json',
     'qa/evidence/au-ucr-ep-000001-s0/baseline/lane-materialization.json',
+    'qa/evidence/au-ucr-ep-000001-s0/star-wr-0001/EV-INF-PRE-A09-AUTHORITY-NAMES-00.json',
+    'qa/evidence/au-ucr-ep-000001-s0/star-wr-0001/EV-INF-PRE-A09-DETERMINISTIC-READINESS-00.json',
     'qa/evidence/au-ucr-ep-000001-s0/receipts/test-fast.json',
     'qa/evidence/au-ucr-ep-000001-s0/receipts/test-fast.log',
     'qa/evidence/au-ucr-ep-000001-s0/receipts/test-http.json',
@@ -482,6 +484,33 @@ function check() {
   const pkg = json('docs/experiments/au-ucr-ep-000001/UCR_001_EVIDENCE_PACKAGE.json');
   if (pkg.execution_released === true || pkg.items.some(item => item.status === 'accepted')) {
     fail(errors, 'UCR-001 evidence package must not mark execution released or items accepted');
+  }
+  const authorityNames = JSON.parse(readFileSync(join(ROOT, 'qa/evidence/au-ucr-ep-000001-s0/star-wr-0001/EV-INF-PRE-A09-AUTHORITY-NAMES-00.json'), 'utf8'));
+  if (authorityNames.result !== 'BLOCKED_BY_MISSING_NAMED_ASSIGNMENTS') {
+    fail(errors, 'PRE_A09 authority names receipt must stay blocked by missing named assignments');
+  }
+  if (authorityNames.a09_submission_readiness?.role_names_populated !== true ||
+      authorityNames.a09_submission_readiness?.authority_evidence_populated !== true) {
+    fail(errors, 'PRE_A09 authority names and authority evidence must be populated');
+  }
+  if (authorityNames.a09_submission_readiness?.named_assignment_authority_complete !== false ||
+      authorityNames.a09_submission_readiness?.decision_chair_receipt_present !== false ||
+      authorityNames.a09_submission_readiness?.execution_release_receipt_present !== false) {
+    fail(errors, 'PRE_A09 receipt must not record A09 authority, decision, or execution release');
+  }
+  if ((authorityNames.role_assignment_evidence || []).some(role => role.authority_to_act !== false || role.effective_assignment_found !== false)) {
+    fail(errors, 'PRE_A09 role evidence must not grant action authority');
+  }
+  const deterministicReadiness = JSON.parse(readFileSync(join(ROOT, 'qa/evidence/au-ucr-ep-000001-s0/star-wr-0001/EV-INF-PRE-A09-DETERMINISTIC-READINESS-00.json'), 'utf8'));
+  if (deterministicReadiness.result !== 'PASS_WITH_A09_TRANSITION_CLOSED') {
+    fail(errors, 'PRE_A09 deterministic readiness receipt must pass with A09 transition closed');
+  }
+  if (deterministicReadiness.readiness_conclusion?.deterministic_checks_passed !== true ||
+      deterministicReadiness.readiness_conclusion?.a09_decision !== 'NO_DECISION_NO_TRANSITION') {
+    fail(errors, 'PRE_A09 deterministic readiness must pass without an A09 decision');
+  }
+  if (deterministicReadiness.readiness_conclusion?.s1_transition !== 'closed_pending_explicit_acceptance') {
+    fail(errors, 'PRE_A09 deterministic readiness must keep S1 closed');
   }
   if (errors.length) {
     for (const error of errors) console.error('check: ' + error);
