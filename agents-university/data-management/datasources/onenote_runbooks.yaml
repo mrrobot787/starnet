@@ -1,0 +1,207 @@
+# OneNote Runbooks - Operational Knowledge Base
+# High-value procedural knowledge for RAG and evaluation
+
+id: onenote_runbooks
+name: "OneNote Runbooks and Procedures"
+type: onenote
+owner: ITOps
+system_of_record: true
+scope: "notebooks:Runbooks,Procedures,Playbooks sections:all"
+
+# Legal and compliance framework
+legal:
+  basis: legitimate_interests
+  pii: possible  # May contain employee names in procedures
+  dpa: "2024-11-01"
+  license: "Internal use only - Microsoft 365 Enterprise Agreement"
+
+# Governance controls
+governance:
+  retention_days: 1095  # 3 years for operational procedures
+  redaction: "pii_v2"
+  sensitivity: "Confidential"
+
+# Double Helix integration
+sissa_overlay: SISSA_ACTION_PLANNER
+double_helix_tags:
+  section: GOV  # Governance/procedures primary
+  strand_default: S  # Runbooks are solutions/procedures
+  auto_tag_patterns:
+    - pattern: "incident|emergency|outage"
+      section: SEC
+      strand: S
+    - pattern: "hardware|server|device|maintenance"
+      section: HW
+      strand: S
+    - pattern: "network|connectivity|routing|firewall"
+      section: NET
+      strand: S
+    - pattern: "software|application|deployment|update"
+      section: SW
+      strand: S
+    - pattern: "security|vulnerability|patch|compliance"
+      section: SEC
+      strand: S
+    - pattern: "backup|recovery|disaster|continuity"
+      section: MEM
+      strand: S
+
+# Security configuration
+security:
+  auth: aad_app_sp
+  secret_name: onenote_service_principal_secret
+  permissions:
+    - "Notes.Read.All"
+    - "Sites.Read.All"
+  
+# Storage layer configuration
+destinations:
+  bronze: "lake/bronze/m365/onenote/runbooks/"
+  silver: "lake/silver/procedures/structured/"
+  gold: "lake/gold/rag_corpus/operational_knowledge/"
+  vector: "vectordb/runbook_knowledge"
+
+# Refresh and processing
+refresh:
+  schedule: "PT12H"  # Every 12 hours
+  mode: incremental
+  batch_size: 500
+  
+# Quality controls
+quality:
+  min_doc_len: 200   # Procedures should have substance
+  max_doc_len: 20000
+  dedupe: content_similarity@0.85
+  language_filter: ["en", "en-US"]
+  exclude_patterns:
+    - "draft*"
+    - "template*"
+    - "*test*"
+  
+# Content processing rules
+processing:
+  extract_metadata:
+    - notebook_name
+    - section_name
+    - page_title
+    - created_by
+    - created_date
+    - last_modified_by
+    - last_modified_date
+    - page_level
+    - tags
+    - procedure_type
+  
+  # Special processing for procedural content
+  procedure_analysis:
+    - extract_steps: true
+    - identify_prerequisites: true
+    - find_decision_points: true
+    - extract_troubleshooting: true
+    - identify_tools_required: true
+    
+  content_structuring:
+    - parse_numbered_lists: true
+    - extract_code_blocks: true
+    - identify_warnings_cautions: true
+    - parse_checklists: true
+    
+  chunk_strategy:
+    method: procedure_aware
+    preserve_step_sequences: true
+    chunk_by_sections: true
+    maintain_context: true
+    
+  embedding_model: "text-embedding-ada-002"
+
+# Scoring (0-5 scale for prioritization rubric)
+scoring:
+  value: 5      # Extremely high value - operational procedures
+  legality: 5   # Full legal rights - internal M365 content
+  effort: 2     # Low effort - Graph API mature for OneNote
+  risk: 2       # Low risk - internal operational procedures
+
+# Expected outputs and usage
+usage:
+  primary_purpose: rag
+  secondary_purposes: 
+    - eval
+    - policy
+  
+  target_models:
+    - operations_assistant
+    - incident_responder
+    - procedure_recommender
+    
+  use_cases:
+    - step_by_step_guidance
+    - troubleshooting_assistance
+    - procedure_compliance_checking
+    - knowledge_gap_identification
+    
+  evaluation_metrics:
+    - procedure_accuracy
+    - step_completeness
+    - troubleshooting_effectiveness
+    - knowledge_retrieval_precision
+
+# Special handling for procedural content
+procedure_processing:
+  step_extraction:
+    - numbered_steps: true
+    - bullet_points: true
+    - sub_procedures: true
+    - conditional_branches: true
+    
+  knowledge_structuring:
+    - prerequisites_mapping: true
+    - tools_inventory: true
+    - risk_assessment: true
+    - success_criteria: true
+    
+  cross_referencing:
+    - related_procedures: true
+    - dependent_systems: true
+    - escalation_paths: true
+    - contact_information: true
+
+# OneNote-specific configuration
+onenote_config:
+  notebook_priorities:
+    - "IT Operations Runbooks"
+    - "Security Procedures"
+    - "Emergency Response"
+    - "Maintenance Procedures"
+    - "Troubleshooting Guides"
+  
+  section_types:
+    - runbooks
+    - procedures
+    - playbooks
+    - checklists
+    - troubleshooting
+    - maintenance
+    
+  content_types:
+    - step_by_step_procedures
+    - decision_trees
+    - troubleshooting_flowcharts
+    - emergency_contacts
+    - system_diagrams
+    
+# Monitoring and alerting
+monitoring:
+  freshness_threshold_hours: 24
+  quality_threshold_pct: 90
+  procedure_completeness_threshold: 80
+  alert_channels:
+    - teams://itops-knowledge
+    - email://knowledge-management@company.com
+    
+# Integration checkpoints
+integration:
+  cls_audit_events: true
+  sissa_event_generation: true
+  dh_tag_propagation: true
+  procedure_versioning: true
+  knowledge_graph_integration: true

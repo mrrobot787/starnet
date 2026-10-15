@@ -1,0 +1,251 @@
+# CI/CD Pipeline Logs - Failure Pattern Analysis
+# Predictive features for build/deployment failures
+
+id: cicd_pipelines
+name: "CI/CD Pipeline Logs and Reports"
+type: cicd
+owner: DevOps
+system_of_record: true
+scope: "pipelines:all builds:completed tests:all deployments:all"
+
+# Legal and compliance framework
+legal:
+  basis: legitimate_interests
+  pii: possible  # Developer names, commit messages
+  dpa: "2024-11-01"
+  license: "Internal use only - Azure DevOps/Jenkins Enterprise"
+
+# Governance controls
+governance:
+  retention_days: 365  # 1 year for build history
+  redaction: "pii_v2_dev"  # Developer-aware redaction
+  sensitivity: "Confidential"
+
+# Double Helix integration
+sissa_overlay: SISSA_ACTION_PLANNER
+double_helix_tags:
+  section: SW  # Software development primary
+  strand_default: I  # Build failures are issues
+  auto_tag_patterns:
+    - pattern: "success|passed|deployed|completed"
+      section: SW
+      strand: S  # Successful builds are solutions
+    - pattern: "failed|error|exception|timeout"
+      section: SW
+      strand: I
+    - pattern: "test|unit.test|integration.test"
+      section: SW
+      strand: I
+    - pattern: "security|vulnerability|scan|compliance"
+      section: SEC
+      strand: I
+    - pattern: "infrastructure|terraform|ansible|kubernetes"
+      section: HW
+      strand: I
+    - pattern: "network|connectivity|endpoint|service"
+      section: NET
+      strand: I
+
+# Security configuration
+security:
+  auth: service_principal
+  secret_name: devops_service_principal_secret
+  permissions:
+    - "Build.Read"
+    - "Release.Read"
+    - "Test.Read"
+  
+# Storage layer configuration
+destinations:
+  bronze: "lake/bronze/devops/cicd/pipelines/"
+  silver: "lake/silver/builds/structured/"
+  gold: "lake/gold/training/failure_prediction/"
+  vector: "vectordb/devops_knowledge"
+
+# Refresh and processing
+refresh:
+  schedule: "PT2H"  # Every 2 hours
+  mode: incremental
+  batch_size: 1000
+  
+# Quality controls
+quality:
+  min_doc_len: 100   # Build logs should have content
+  max_doc_len: 50000 # Large logs need chunking
+  dedupe: build_id   # Builds should be unique
+  required_fields:
+    - build_id
+    - pipeline_name
+    - status
+    - start_time
+    - end_time
+    - repository
+    - branch
+  
+# Content processing rules
+processing:
+  extract_metadata:
+    - build_id
+    - pipeline_name
+    - pipeline_type
+    - status
+    - result
+    - start_time
+    - end_time
+    - duration_seconds
+    - repository
+    - branch
+    - commit_sha
+    - commit_message
+    - triggered_by
+    - agent_pool
+    - stage_results
+    - test_results
+    - artifact_info
+    - deployment_target
+  
+  # Special processing for build analysis
+  failure_analysis:
+    - extract_error_messages: true
+    - identify_failure_stages: true
+    - parse_test_failures: true
+    - analyze_dependency_issues: true
+    - extract_performance_metrics: true
+    
+  feature_engineering:
+    - build_duration_minutes
+    - time_since_last_build
+    - commit_frequency
+    - test_count
+    - test_failure_rate
+    - code_coverage_pct
+    - complexity_metrics
+    - dependency_count
+    
+  log_processing:
+    - extract_error_patterns: true
+    - identify_warning_trends: true
+    - parse_performance_data: true
+    - clean_ansi_codes: true
+    
+  chunk_strategy:
+    method: log_aware
+    preserve_error_context: true
+    chunk_by_stages: true
+    
+# Scoring (0-5 scale for prioritization rubric)
+scoring:
+  value: 4      # High value - predictive failure patterns
+  legality: 5   # Full legal rights - internal development data
+  effort: 3     # Moderate effort - APIs available but complex logs
+  risk: 2       # Low risk - internal development data
+
+# Expected outputs and usage
+usage:
+  primary_purpose: ft  # Fine-tuning for failure prediction
+  secondary_purposes: 
+    - rag
+    - eval
+  
+  target_models:
+    - build_failure_predictor
+    - deployment_risk_assessor
+    - test_failure_analyzer
+    
+  training_objectives:
+    - build_success_prediction
+    - failure_root_cause_classification
+    - deployment_risk_scoring
+    - test_failure_prediction
+    - performance_regression_detection
+    
+  evaluation_metrics:
+    - failure_prediction_accuracy
+    - false_positive_rate
+    - early_warning_precision
+    - root_cause_classification_f1
+
+# Special handling for CI/CD data
+cicd_processing:
+  pipeline_stages:
+    - source_checkout
+    - build_compilation
+    - unit_tests
+    - integration_tests
+    - security_scans
+    - code_quality_checks
+    - artifact_creation
+    - deployment_staging
+    - deployment_production
+    - post_deployment_tests
+    
+  failure_categories:
+    - compilation_errors
+    - test_failures
+    - dependency_issues
+    - infrastructure_problems
+    - security_violations
+    - timeout_issues
+    - resource_constraints
+    - configuration_errors
+    
+  success_indicators:
+    - all_tests_passed
+    - security_scans_clean
+    - performance_benchmarks_met
+    - deployment_successful
+    - health_checks_passed
+
+# Build pattern analysis
+pattern_analysis:
+  temporal_patterns:
+    - time_of_day_effects: true
+    - day_of_week_patterns: true
+    - seasonal_trends: true
+    
+  code_patterns:
+    - commit_size_impact: true
+    - file_change_patterns: true
+    - author_success_rates: true
+    - branch_merge_patterns: true
+    
+  infrastructure_patterns:
+    - agent_performance: true
+    - resource_utilization: true
+    - network_latency_impact: true
+    - dependency_availability: true
+
+# Test result processing
+test_processing:
+  test_types:
+    - unit_tests
+    - integration_tests
+    - end_to_end_tests
+    - performance_tests
+    - security_tests
+    - accessibility_tests
+    
+  metrics_extraction:
+    - test_count
+    - pass_rate
+    - execution_time
+    - flaky_test_detection
+    - coverage_metrics
+    - performance_benchmarks
+    
+# Monitoring and alerting
+monitoring:
+  freshness_threshold_hours: 4
+  quality_threshold_pct: 85
+  build_success_rate_threshold: 80
+  alert_channels:
+    - teams://devops-platform
+    - slack://build-alerts
+    
+# Integration checkpoints
+integration:
+  cls_audit_events: true
+  sissa_event_generation: true
+  dh_tag_propagation: true
+  build_trend_analysis: true
+  deployment_correlation: true

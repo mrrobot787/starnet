@@ -1,0 +1,185 @@
+# Jira Incident Management - Critical Training Data Source
+# High-value supervised learning from resolved incidents
+
+id: jira_incidents
+name: "Jira Incident Management System"
+type: jira
+owner: ITOps
+system_of_record: true
+scope: "project = INCIDENT AND status in (Resolved, Closed)"
+
+# Legal and compliance framework
+legal:
+  basis: legitimate_interests
+  pii: possible  # Incident descriptions may contain user info
+  dpa: "2024-11-01"
+  license: "Internal use only - Atlassian Cloud Agreement"
+
+# Governance controls
+governance:
+  retention_days: 1095  # 3 years for incident history
+  redaction: "pii_v2_strict"
+  sensitivity: "Confidential"
+
+# Double Helix integration
+sissa_overlay: SISSA_DECISION_SUPPORT
+double_helix_tags:
+  section: SEC  # Security incidents primary
+  strand_default: I  # Issues are incidents
+  auto_tag_patterns:
+    - pattern: "resolved|fixed|closed"
+      section: SEC
+      strand: S  # Solutions are resolutions
+    - pattern: "hardware|server|device|disk|memory"
+      section: HW
+      strand: I
+    - pattern: "network|connectivity|dns|firewall"
+      section: NET
+      strand: I
+    - pattern: "application|software|service|api"
+      section: SW
+      strand: I
+    - pattern: "security|breach|vulnerability|malware"
+      section: SEC
+      strand: I
+    - pattern: "policy|compliance|governance|audit"
+      section: GOV
+      strand: I
+
+# Security configuration
+security:
+  auth: oauth2_service_account
+  secret_name: jira_service_account_token
+  permissions:
+    - "read:issue"
+    - "read:project"
+    - "read:user"
+  
+# Storage layer configuration
+destinations:
+  bronze: "lake/bronze/atlassian/jira/incidents/"
+  silver: "lake/silver/structured/incidents/"
+  gold: "lake/gold/training/incident_resolution/"
+  vector: "vectordb/incident_knowledge"
+
+# Refresh and processing
+refresh:
+  schedule: "PT2H"  # Every 2 hours for incident data
+  mode: incremental
+  batch_size: 500
+  lookback_days: 7  # Check for updates in last week
+  
+# Quality controls
+quality:
+  min_doc_len: 100  # Shorter for structured incident data
+  max_doc_len: 10000
+  dedupe: exact_match  # Incidents should be unique
+  required_fields:
+    - issue_key
+    - summary
+    - description
+    - status
+    - resolution
+    - created
+    - resolved
+  
+# Content processing rules
+processing:
+  extract_metadata:
+    - issue_key
+    - issue_type
+    - priority
+    - status
+    - resolution
+    - assignee
+    - reporter
+    - created_date
+    - resolved_date
+    - time_to_resolution
+    - components
+    - labels
+    - custom_fields
+  
+  # Special processing for supervised learning
+  label_extraction:
+    - resolution_category
+    - root_cause
+    - solution_effectiveness
+    - escalation_required
+    
+  feature_engineering:
+    - time_to_resolution_hours
+    - business_hours_impact
+    - severity_score
+    - complexity_indicators
+    
+  chunk_strategy:
+    method: structured  # Keep incident records intact
+    preserve_structure: true
+    
+# Scoring (0-5 scale for prioritization rubric)
+scoring:
+  value: 5      # Extremely high value - labeled training data
+  legality: 5   # Full legal rights - internal operational data
+  effort: 3     # Moderate effort - REST API well documented
+  risk: 3       # Moderate risk - contains operational details
+
+# Expected outputs and usage
+usage:
+  primary_purpose: ft  # Fine-tuning for incident response
+  secondary_purposes: 
+    - eval
+    - rag
+  
+  target_models:
+    - incident_classifier
+    - resolution_recommender
+    - escalation_predictor
+    
+  training_objectives:
+    - incident_categorization
+    - resolution_time_prediction
+    - solution_recommendation
+    - escalation_detection
+    
+  evaluation_metrics:
+    - classification_accuracy
+    - resolution_time_mae
+    - solution_relevance_score
+    - escalation_precision_recall
+
+# Special handling for supervised learning
+supervised_learning:
+  label_fields:
+    - resolution: "target_solution"
+    - time_to_resolution: "target_duration"
+    - escalation_level: "target_escalation"
+  
+  feature_fields:
+    - summary
+    - description
+    - priority
+    - components
+    - initial_assessment
+    
+  train_test_split:
+    method: temporal
+    train_end_date: "2024-08-01"
+    validation_start_date: "2024-08-01"
+    test_start_date: "2024-09-01"
+
+# Monitoring and alerting
+monitoring:
+  freshness_threshold_hours: 4
+  quality_threshold_pct: 95  # High bar for training data
+  label_completeness_threshold: 90
+  alert_channels:
+    - teams://itops-incidents
+    - pagerduty://data-platform
+    
+# Integration checkpoints
+integration:
+  cls_audit_events: true
+  sissa_event_generation: true
+  dh_tag_propagation: true
+  incident_correlation: true  # Link to other incident systems

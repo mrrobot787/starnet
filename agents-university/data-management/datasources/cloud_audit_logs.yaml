@@ -1,0 +1,256 @@
+# Cloud Audit Logs - Anomaly Detection Training
+# High-value sequence modeling data with strict redaction
+
+id: cloud_audit_logs
+name: "Cloud Audit Logs (Azure/AWS/GCP)"
+type: logs
+owner: CloudOps
+system_of_record: true
+scope: "logs:audit events:all services:compute,storage,network,security"
+
+# Legal and compliance framework
+legal:
+  basis: legitimate_interests
+  pii: present  # User IDs, IP addresses, resource names
+  dpa: "2024-11-01"
+  license: "Internal use only - Cloud Provider Enterprise Agreement"
+
+# Governance controls
+governance:
+  retention_days: 2555  # 7 years for audit compliance
+  redaction: "pii_v2_strict_audit"  # Strictest redaction for audit logs
+  sensitivity: "Restricted"
+
+# Double Helix integration
+sissa_overlay: SISSA_RISK_VALIDATOR
+double_helix_tags:
+  section: SEC  # Security/audit primary
+  strand_default: I  # Audit events as security observations
+  auto_tag_patterns:
+    - pattern: "success|completed|allowed"
+      section: SEC
+      strand: S  # Successful operations
+    - pattern: "failed|denied|blocked|unauthorized"
+      section: SEC
+      strand: I  # Security issues
+    - pattern: "compute|vm|instance|container"
+      section: HW
+      strand: I
+    - pattern: "network|vpc|subnet|firewall|load.balancer"
+      section: NET
+      strand: I
+    - pattern: "storage|blob|s3|database|backup"
+      section: MEM
+      strand: I
+    - pattern: "identity|authentication|authorization|rbac"
+      section: SEC
+      strand: I
+    - pattern: "compliance|policy|governance|audit"
+      section: GOV
+      strand: I
+
+# Security configuration
+security:
+  auth: managed_identity
+  secret_name: cloud_audit_managed_identity
+  permissions:
+    - "AuditLogs.Read.All"
+    - "CloudTrail.Read"
+    - "Logging.Read"
+  
+# Storage layer configuration
+destinations:
+  bronze: "lake/bronze/cloud/audit/logs/"
+  silver: "lake/silver/audit/normalized/"
+  gold: "lake/gold/training/anomaly_detection/"
+  vector: "vectordb/audit_patterns"
+
+# Refresh and processing
+refresh:
+  schedule: "PT30M"  # Every 30 minutes for audit data
+  mode: incremental
+  batch_size: 10000
+  lookback_minutes: 60  # Check for updates in last hour
+  
+# Quality controls
+quality:
+  min_doc_len: 50    # Audit records are structured
+  max_doc_len: 2000
+  dedupe: event_id   # Events should be unique
+  required_fields:
+    - event_id
+    - timestamp
+    - event_name
+    - source_service
+    - user_identity
+    - source_ip
+    - user_agent
+    - result
+  
+# Content processing rules
+processing:
+  extract_metadata:
+    - event_id
+    - timestamp
+    - event_name
+    - event_category
+    - source_service
+    - user_identity
+    - user_type
+    - source_ip
+    - user_agent
+    - result
+    - error_code
+    - resource_name
+    - resource_type
+    - region
+    - account_id
+    - session_id
+    - request_id
+    - api_version
+  
+  # Special processing for audit analysis
+  sequence_analysis:
+    - user_session_reconstruction: true
+    - temporal_pattern_extraction: true
+    - resource_access_chains: true
+    - anomaly_feature_engineering: true
+    
+  # Strict redaction for audit logs
+  audit_redaction:
+    - hash_user_identities: true
+    - mask_ip_addresses: true
+    - redact_resource_names: partial  # Keep some context
+    - anonymize_session_ids: true
+    
+  feature_engineering:
+    - time_of_day_features: true
+    - day_of_week_features: true
+    - user_behavior_baselines: true
+    - resource_access_patterns: true
+    - geographic_anomalies: true
+    - velocity_features: true
+    
+  chunk_strategy:
+    method: temporal_sequence
+    preserve_session_context: true
+    sequence_length: 100  # Events per sequence
+    
+# Scoring (0-5 scale for prioritization rubric)
+scoring:
+  value: 4      # High value - anomaly detection training
+  legality: 4   # Good legal rights - internal audit data
+  effort: 4     # Higher effort - complex log processing
+  risk: 5       # Highest risk - contains PII and sensitive audit data
+
+# Expected outputs and usage
+usage:
+  primary_purpose: ft  # Fine-tuning for anomaly detection
+  secondary_purposes: 
+    - eval
+    - policy
+  
+  target_models:
+    - anomaly_detector
+    - user_behavior_analyzer
+    - threat_hunter
+    - compliance_monitor
+    
+  training_objectives:
+    - anomalous_behavior_detection
+    - insider_threat_identification
+    - compliance_violation_detection
+    - attack_pattern_recognition
+    - baseline_behavior_modeling
+    
+  evaluation_metrics:
+    - anomaly_detection_precision
+    - false_positive_rate
+    - threat_detection_recall
+    - compliance_accuracy
+
+# Special handling for audit data
+audit_processing:
+  event_categories:
+    - authentication
+    - authorization
+    - resource_access
+    - configuration_changes
+    - data_access
+    - administrative_actions
+    - network_events
+    - security_events
+    
+  anomaly_indicators:
+    - unusual_access_times
+    - geographic_anomalies
+    - privilege_escalation
+    - bulk_data_access
+    - failed_authentication_spikes
+    - unusual_resource_access
+    - configuration_drift
+    
+  compliance_mapping:
+    - gdpr_data_access
+    - sox_financial_controls
+    - hipaa_health_records
+    - pci_payment_data
+    - iso27001_security_controls
+
+# Sequence modeling configuration
+sequence_modeling:
+  window_sizes:
+    - short_term: "PT1H"    # 1 hour windows
+    - medium_term: "PT8H"   # 8 hour windows
+    - long_term: "P1D"      # 1 day windows
+    
+  user_behavior_baselines:
+    - typical_login_times: true
+    - common_resources_accessed: true
+    - usual_geographic_locations: true
+    - normal_session_durations: true
+    - standard_api_usage_patterns: true
+    
+  anomaly_features:
+    - deviation_from_baseline: true
+    - rare_event_combinations: true
+    - velocity_anomalies: true
+    - geographic_impossibilities: true
+    - privilege_misuse: true
+
+# Privacy and compliance controls
+privacy_controls:
+  data_minimization:
+    - retain_only_necessary_fields: true
+    - aggregate_where_possible: true
+    - pseudonymize_identifiers: true
+    
+  access_controls:
+    - role_based_access: true
+    - audit_data_access: true
+    - encryption_at_rest: true
+    - encryption_in_transit: true
+    
+  retention_policies:
+    - automatic_deletion: true
+    - compliance_holds: true
+    - legal_preservation: true
+
+# Monitoring and alerting
+monitoring:
+  freshness_threshold_minutes: 60
+  quality_threshold_pct: 98  # Very high bar for audit data
+  anomaly_detection_threshold: 95
+  alert_channels:
+    - teams://security-operations
+    - pagerduty://audit-compliance
+    - email://audit-team@company.com
+    
+# Integration checkpoints
+integration:
+  cls_audit_events: true
+  sissa_event_generation: true
+  dh_tag_propagation: true
+  compliance_reporting: true
+  threat_intelligence_correlation: true
+  incident_response_integration: true
