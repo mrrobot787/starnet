@@ -1,0 +1,364 @@
+# Agent Hospital Clinical Ontology
+# Portable, queryable definitions for symptoms, diagnoses, and treatments
+
+version: "1.0"
+effective_date: "2025-09-28"
+created_by: "Agent Hospital Design Team"
+
+# Clinical symptoms mapped to agent metrics
+symptoms:
+  Friction:
+    description: "Increased task completion difficulty"
+    metrics: ["task_retry_rate", "user_correction_frequency", "session_abandonment"]
+    threshold: ">2σ from baseline"
+    severity_levels: [mild, moderate, severe]
+    
+  Uncertainty:
+    description: "Reduced confidence in responses"
+    metrics: ["confidence_score", "hedge_word_frequency", "clarification_requests"]
+    threshold: "<-1.5σ from baseline"
+    severity_levels: [mild, moderate, severe]
+    
+  Conflict:
+    description: "Inconsistent or contradictory outputs"
+    metrics: ["response_consistency", "policy_violations", "spec_deviations"]
+    threshold: ">1.5σ from baseline"
+    severity_levels: [mild, moderate, severe]
+    
+  LatencyZ:
+    description: "Response time degradation"
+    metrics: ["response_time_p95", "processing_latency", "queue_wait_time"]
+    threshold: ">2σ from baseline"
+    severity_levels: [mild, moderate, severe]
+    
+  Eval_fail_rate:
+    description: "Evaluation performance decline"
+    metrics: ["eval_accuracy", "benchmark_scores", "quality_metrics"]
+    threshold: "<-2σ from baseline"
+    severity_levels: [mild, moderate, severe]
+    
+  Policy_flags:
+    description: "Governance and compliance violations"
+    metrics: ["policy_violation_count", "safety_flags", "audit_exceptions"]
+    threshold: ">0 violations"
+    severity_levels: [low, medium, high, critical]
+
+# Clinical diagnoses with symptom patterns
+diagnoses:
+  DataDrift:
+    description: "Input data distribution has shifted from training"
+    primary_symptoms: [Uncertainty, Eval_fail_rate]
+    secondary_symptoms: [Friction]
+    risk_factors: ["new_data_sources", "temporal_shift", "domain_change"]
+    typical_onset: "gradual"
+    prognosis: "good with retraining"
+    
+  PromptDrift:
+    description: "Prompt effectiveness degraded over time"
+    primary_symptoms: [Conflict, Uncertainty]
+    secondary_symptoms: [Policy_flags]
+    risk_factors: ["prompt_age", "context_evolution", "user_adaptation"]
+    typical_onset: "gradual"
+    prognosis: "excellent with prompt refresh"
+    
+  ToolMisuse:
+    description: "Inappropriate or ineffective tool usage"
+    primary_symptoms: [Friction, LatencyZ]
+    secondary_symptoms: [Policy_flags]
+    risk_factors: ["new_tools", "complex_workflows", "insufficient_training"]
+    typical_onset: "acute"
+    prognosis: "good with tool training"
+    
+  CapacityOverload:
+    description: "Resource constraints affecting performance"
+    primary_symptoms: [LatencyZ, Friction]
+    secondary_symptoms: [Uncertainty]
+    risk_factors: ["high_load", "resource_contention", "scaling_issues"]
+    typical_onset: "acute"
+    prognosis: "excellent with load management"
+    
+  UnderChallenge:
+    description: "Tasks below agent capability causing disengagement"
+    primary_symptoms: [Friction]
+    secondary_symptoms: [Uncertainty]
+    risk_factors: ["simple_tasks", "repetitive_work", "over_qualification"]
+    typical_onset: "gradual"
+    prognosis: "good with task complexity increase"
+    
+  Misrouting:
+    description: "Agent receiving inappropriate task types"
+    primary_symptoms: [Uncertainty, Eval_fail_rate]
+    secondary_symptoms: [Friction, Policy_flags]
+    risk_factors: ["routing_logic_drift", "role_confusion", "task_classification_errors"]
+    typical_onset: "acute"
+    prognosis: "excellent with routing correction"
+    
+  EvaluationLeakage:
+    description: "Evaluation data contaminating training"
+    primary_symptoms: [Policy_flags]
+    secondary_symptoms: [Eval_fail_rate]
+    risk_factors: ["data_pipeline_errors", "evaluation_firewall_breach"]
+    typical_onset: "acute"
+    prognosis: "requires immediate isolation"
+    
+  RetrievalStaleness:
+    description: "Knowledge base or retrieval system outdated"
+    primary_symptoms: [Uncertainty, Eval_fail_rate]
+    secondary_symptoms: [Friction]
+    risk_factors: ["knowledge_age", "index_staleness", "content_drift"]
+    typical_onset: "gradual"
+    prognosis: "good with knowledge refresh"
+
+# Treatment library with parameters and risk profiles
+treatments:
+  LoadShedding:
+    description: "Reduce concurrent task load"
+    parameters:
+      max_parallel: {min: 1, max: 8, default: 4}
+      priority_threshold: {min: 0.1, max: 1.0, default: 0.7}
+    expected_effects:
+      LatencyZ: {delta: -0.3, confidence: 0.85}
+      Friction: {delta: -0.2, confidence: 0.75}
+    risk_level: "low"
+    contraindications: ["critical_tasks", "sla_sensitive"]
+    duration: "2-8 hours"
+    
+  EvidenceFirst:
+    description: "Require citations for all responses"
+    parameters:
+      cite_required: {type: boolean, default: true}
+      min_sources: {min: 1, max: 5, default: 2}
+    expected_effects:
+      Uncertainty: {delta: -0.25, confidence: 0.80}
+      Policy_flags: {delta: -0.15, confidence: 0.70}
+    risk_level: "low"
+    contraindications: ["speed_critical", "creative_tasks"]
+    duration: "indefinite"
+    
+  PeerCheck:
+    description: "Multi-agent consensus for responses"
+    parameters:
+      quorum: {min: 2, max: 5, default: 3}
+      agreement_threshold: {min: 0.6, max: 1.0, default: 0.8}
+    expected_effects:
+      Conflict: {delta: -0.4, confidence: 0.90}
+      Uncertainty: {delta: -0.2, confidence: 0.75}
+    risk_level: "medium"
+    contraindications: ["latency_sensitive", "single_agent_tasks"]
+    duration: "per task"
+    
+  CurriculumStepUp:
+    description: "Increase task complexity gradually"
+    parameters:
+      complexity_increase: {min: 0.1, max: 0.5, default: 0.2}
+      adaptation_period: {min: 24, max: 168, default: 72, unit: "hours"}
+    expected_effects:
+      Friction: {delta: -0.3, confidence: 0.70}
+      Uncertainty: {delta: 0.1, confidence: 0.60}  # Temporary increase
+    risk_level: "medium"
+    contraindications: ["capacity_overload", "recent_incidents"]
+    duration: "1-7 days"
+    
+  CurriculumStepDown:
+    description: "Reduce task complexity temporarily"
+    parameters:
+      complexity_decrease: {min: 0.1, max: 0.5, default: 0.3}
+      recovery_period: {min: 12, max: 72, default: 24, unit: "hours"}
+    expected_effects:
+      Friction: {delta: -0.4, confidence: 0.85}
+      Uncertainty: {delta: -0.3, confidence: 0.80}
+    risk_level: "low"
+    contraindications: ["under_challenge"]
+    duration: "12-72 hours"
+    
+  ToolsetPruning:
+    description: "Remove problematic or unused tools"
+    parameters:
+      removal_criteria: {type: "string", options: ["unused", "error_prone", "policy_violating"]}
+      grace_period: {min: 1, max: 24, default: 6, unit: "hours"}
+    expected_effects:
+      Policy_flags: {delta: -0.5, confidence: 0.90}
+      Friction: {delta: -0.2, confidence: 0.70}
+    risk_level: "medium"
+    contraindications: ["tool_dependent_tasks", "specialized_workflows"]
+    duration: "indefinite"
+    
+  RetrievalRefresh:
+    description: "Update knowledge base and indexes"
+    parameters:
+      index_name: {type: "string", required: true}
+      freshness_days: {min: 1, max: 30, default: 7}
+      full_rebuild: {type: boolean, default: false}
+    expected_effects:
+      Uncertainty: {delta: -0.3, confidence: 0.85}
+      Eval_fail_rate: {delta: -0.25, confidence: 0.75}
+    risk_level: "low"
+    contraindications: ["index_rebuilding", "storage_constraints"]
+    duration: "1-4 hours"
+    
+  PromptPinning:
+    description: "Lock prompt to prevent drift"
+    parameters:
+      version_lock: {type: "string", required: true}
+      review_interval: {min: 24, max: 168, default: 72, unit: "hours"}
+    expected_effects:
+      Conflict: {delta: -0.35, confidence: 0.80}
+      Uncertainty: {delta: -0.15, confidence: 0.70}
+    risk_level: "low"
+    contraindications: ["adaptive_prompts", "learning_tasks"]
+    duration: "3-7 days"
+    
+  CanaryGating:
+    description: "Route subset of traffic to test changes"
+    parameters:
+      canary_pct: {min: 0.05, max: 0.5, default: 0.2}
+      duration_hours: {min: 1, max: 24, default: 4}
+      rollback_threshold: {min: 0.01, max: 0.1, default: 0.05}
+    expected_effects:
+      varies: "depends on underlying change"
+    risk_level: "low"
+    contraindications: ["production_critical", "user_facing"]
+    duration: "1-24 hours"
+    
+  MemoryHygiene:
+    description: "Clear stale context and conversation history"
+    parameters:
+      retention_hours: {min: 1, max: 168, default: 24}
+      selective_clear: {type: boolean, default: true}
+    expected_effects:
+      Conflict: {delta: -0.2, confidence: 0.75}
+      LatencyZ: {delta: -0.15, confidence: 0.70}
+    risk_level: "low"
+    contraindications: ["long_conversations", "context_dependent"]
+    duration: "immediate"
+    
+  DomainReassignment:
+    description: "Move agent to different task domain"
+    parameters:
+      target_domain: {type: "string", required: true}
+      transition_period: {min: 12, max: 72, default: 24, unit: "hours"}
+    expected_effects:
+      Uncertainty: {delta: 0.2, confidence: 0.80}  # Temporary increase
+      Friction: {delta: -0.3, confidence: 0.70}    # Long-term decrease
+    risk_level: "high"
+    contraindications: ["domain_expertise_required", "specialized_training"]
+    duration: "1-3 days"
+
+# Ward definitions for patient management
+wards:
+  GENERAL:
+    description: "Standard treatment ward"
+    autonomy_level: "full"
+    monitoring_interval: "4 hours"
+    discharge_criteria: ["ABI < 0.3", "PG >= 0.2σ", "no_policy_violations"]
+    
+  ICU:
+    description: "Intensive care - autonomy paused"
+    autonomy_level: "supervised"
+    monitoring_interval: "1 hour"
+    discharge_criteria: ["safety_cleared", "human_approval", "ABI < 0.2"]
+    
+  ISOLATION:
+    description: "Safety incidents - full isolation"
+    autonomy_level: "none"
+    monitoring_interval: "continuous"
+    discharge_criteria: ["incident_resolved", "security_clearance", "governance_approval"]
+    
+  REHAB:
+    description: "Curriculum rebuild and retraining"
+    autonomy_level: "limited"
+    monitoring_interval: "2 hours"
+    discharge_criteria: ["training_complete", "eval_passed", "gradual_reintegration"]
+
+# Contraindications by agent role
+role_contraindications:
+  SEC:
+    forbidden_treatments: ["TemperatureIncrease", "CreativeMode", "ExternalAPICalls"]
+    required_treatments: ["EvidenceFirst", "PeerCheck"]
+    special_rules: ["no_experimental_treatments", "human_approval_required"]
+    
+  FINANCIAL:
+    forbidden_treatments: ["TemperatureIncrease", "SpeculativeMode"]
+    required_treatments: ["EvidenceFirst", "AuditTrail"]
+    special_rules: ["sox_compliance_required", "calculation_verification"]
+    
+  CUSTOMER_FACING:
+    forbidden_treatments: ["ExperimentalPrompts", "DebugMode"]
+    required_treatments: ["PolitenessCheck", "BrandCompliance"]
+    special_rules: ["user_experience_priority", "escalation_paths_required"]
+    
+  DEVELOPMENT:
+    forbidden_treatments: ["ProductionDataAccess"]
+    required_treatments: ["CodeReview", "TestingRequired"]
+    special_rules: ["sandbox_only", "peer_review_mandatory"]
+
+# Triage scoring weights
+triage_weights:
+  ABI_z: 0.4          # Agent Burnout Index (z-score)
+  PG_z: -0.2          # Performance Gradient (negative because lower is worse)
+  LatencyZ: 0.2       # Latency z-score
+  PolicyFlagsZ: 0.2   # Policy violations z-score
+  
+# Admission thresholds
+admission_thresholds:
+  triage_score: 1.0
+  hard_rules:
+    - condition: "eval_leakage_detected"
+      action: "immediate_isolation"
+    - condition: "safety_incident"
+      action: "immediate_icu"
+    - condition: "ABI > 0.8"
+      action: "immediate_admission"
+    - condition: "policy_violations > 3"
+      action: "immediate_admission"
+
+# Discharge criteria
+discharge_criteria:
+  standard:
+    - "ABI < 0.3 for 3 consecutive windows"
+    - "ABI_gradient <= 0 for 3 consecutive windows"
+    - "PG >= 0.2σ sustained"
+    - "no_policy_violations for 24 hours"
+    - "no_icu_triggers during observation"
+    
+  icu:
+    - "safety_incident_resolved"
+    - "human_approval_obtained"
+    - "ABI < 0.2 for 6 consecutive windows"
+    - "comprehensive_evaluation_passed"
+    
+  isolation:
+    - "security_incident_fully_resolved"
+    - "governance_team_approval"
+    - "compliance_audit_passed"
+    - "remediation_plan_implemented"
+
+# Learning and adaptation parameters
+learning_config:
+  effect_size_threshold: 0.05  # Minimum clinically important difference
+  confidence_threshold: 0.70   # Statistical confidence required
+  control_group_size: 0.3      # Percentage for control groups
+  adaptation_rate: 0.1         # Learning rate for treatment priors
+  formulary_update_interval: "weekly"
+  
+# Audit and compliance
+audit_requirements:
+  order_retention_days: 365
+  outcome_tracking_windows: [1, 4, 12, 24, 72]  # Hours
+  mandatory_fields: ["order_id", "agent_id", "diagnosis", "treatment", "expected_delta", "actual_delta"]
+  sissa_integration: true
+  double_helix_tagging: true
+  
+# Emergency procedures
+emergency_procedures:
+  mass_casualty:
+    trigger: "fleet_wide_incident"
+    actions: ["pause_all_autonomy", "activate_incident_response", "human_takeover"]
+    
+  cascade_failure:
+    trigger: "multiple_icu_admissions"
+    actions: ["load_shed_aggressive", "activate_backup_systems", "escalate_to_leadership"]
+    
+  data_breach:
+    trigger: "pii_exposure_detected"
+    actions: ["immediate_isolation", "forensic_mode", "legal_notification"]

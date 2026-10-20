@@ -1,0 +1,493 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://aml.university/schemas/agent-registry-v1.json",
+  "title": "AML University Agent Registry Schema",
+  "description": "Hospital-metaphor agent registration: each agent is a 'resident' with defined environment, tools, autonomy, and guardrails",
+  "type": "object",
+  "required": ["agent_id", "title", "version", "owner", "environment", "tools", "system_prompt", "autonomy", "guardrails"],
+  "properties": {
+    "agent_id": {
+      "type": "string",
+      "pattern": "^[a-z0-9-]+$",
+      "description": "Unique identifier (kebab-case)"
+    },
+    "title": {
+      "type": "string",
+      "minLength": 3,
+      "description": "Human-readable agent title"
+    },
+    "version": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$",
+      "description": "Semantic version (major.minor.patch)"
+    },
+    "owner": {
+      "type": "object",
+      "required": ["unit", "contact"],
+      "properties": {
+        "unit": {
+          "type": "string",
+          "description": "Owning department or lab"
+        },
+        "contact": {
+          "type": "string",
+          "format": "email",
+          "description": "Primary contact email"
+        }
+      }
+    },
+    "environment": {
+      "type": "object",
+      "required": ["name", "runtime", "network"],
+      "properties": {
+        "name": {
+          "type": "string",
+          "enum": [
+            "Research Library",
+            "Coding Lab",
+            "Clinical Analytics Ward",
+            "Admin Office",
+            "Search Desk",
+            "Training Ground",
+            "Emergency Response Unit",
+            "Data Engineering Bay"
+          ],
+          "description": "Assigned ward/environment"
+        },
+        "runtime": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "description": "Runtime dependencies (python3.11, bash, jupyter, etc.)"
+        },
+        "network": {
+          "type": "object",
+          "required": ["egress", "ingress"],
+          "properties": {
+            "egress": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": ["internet", "intranet", "none"]
+              }
+            },
+            "ingress": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": ["api", "webhook", "none"]
+              }
+            },
+            "restrictions": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "Network policy constraints"
+            }
+          }
+        }
+      }
+    },
+    "tools": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["name", "capabilities"],
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Tool identifier"
+          },
+          "capabilities": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": ["read", "write", "execute", "search", "delete"]
+            },
+            "minItems": 1
+          },
+          "limits": {
+            "type": "object",
+            "properties": {
+              "rate_per_min": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "max_items": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "timeout_seconds": {
+                "type": "integer",
+                "minimum": 1
+              }
+            }
+          },
+          "scopes": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Permission scopes (mlflow:read, wandb:write, etc.)"
+          },
+          "policy": {
+            "type": "object",
+            "properties": {
+              "allow_pii": {
+                "type": "boolean",
+                "default": false
+              },
+              "export_controls": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "enum": ["FERPA", "GDPR", "HIPAA", "CCPA"]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "system_prompt": {
+      "type": "string",
+      "minLength": 20,
+      "description": "Agent identity, goals, tone, and constraints"
+    },
+    "reasoning_overlays": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": ["Bayesian", "Deterministic", "RHL", "Socratic", "Allegorical", "Chain-of-Thought", "Tree-of-Thought"]
+      },
+      "description": "Reasoning strategies available to the agent"
+    },
+    "autonomy": {
+      "type": "object",
+      "required": ["level"],
+      "properties": {
+        "level": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 3,
+          "description": "0=advice only, 1=assist, 2=act-with-approval, 3=act-with-rollback"
+        },
+        "description": {
+          "type": "string"
+        }
+      }
+    },
+    "guardrails": {
+      "type": "object",
+      "required": ["red_lines"],
+      "properties": {
+        "red_lines": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "description": "Absolute prohibitions"
+        },
+        "escalation": {
+          "type": "object",
+          "properties": {
+            "triggers": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "to": {
+              "type": "string",
+              "description": "Human role or contact"
+            }
+          }
+        },
+        "rollback": {
+          "type": "object",
+          "properties": {
+            "supported": {
+              "type": "boolean"
+            },
+            "procedure": {
+              "type": "string",
+              "description": "Runbook ID for rollback"
+            }
+          }
+        }
+      }
+    },
+    "io": {
+      "type": "object",
+      "properties": {
+        "inputs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "outputs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "formats": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "data_access": {
+      "type": "object",
+      "properties": {
+        "catalog": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Data source URIs"
+        },
+        "retention_days": {
+          "type": "integer",
+          "minimum": 1
+        }
+      }
+    },
+    "memory": {
+      "type": "object",
+      "properties": {
+        "short_term": {
+          "type": "object",
+          "properties": {
+            "enabled": {
+              "type": "boolean"
+            },
+            "window": {
+              "type": "integer",
+              "minimum": 1
+            }
+          }
+        },
+        "long_term": {
+          "type": "object",
+          "properties": {
+            "enabled": {
+              "type": "boolean"
+            },
+            "backend": {
+              "type": "string",
+              "enum": ["vector_db", "graph_db", "sql"]
+            }
+          }
+        }
+      }
+    },
+    "training": {
+      "type": "object",
+      "properties": {
+        "curriculum": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "feedback_loops": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "evaluation": {
+          "type": "object",
+          "properties": {
+            "benchmarks": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "reviewer": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "cognitive_loop": {
+      "type": "object",
+      "properties": {
+        "memory": {
+          "type": "object",
+          "properties": {
+            "short_term_window": {
+              "type": "integer"
+            },
+            "long_term": {
+              "type": "boolean"
+            }
+          }
+        },
+        "planning": {
+          "type": "object",
+          "properties": {
+            "strategy": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "runbooks_required": {
+              "type": "boolean"
+            }
+          }
+        },
+        "action": {
+          "type": "object",
+          "properties": {
+            "tool_use": {
+              "type": "string"
+            },
+            "max_steps": {
+              "type": "integer",
+              "minimum": 1
+            }
+          }
+        },
+        "reflection": {
+          "type": "object",
+          "properties": {
+            "self_critique": {
+              "type": "boolean"
+            },
+            "report_period_days": {
+              "type": "integer",
+              "minimum": 1
+            }
+          }
+        }
+      }
+    },
+    "evaluation": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": ["agent", "model", "tool"]
+        },
+        "environment_benchmarks": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "metric": {
+                "type": "string"
+              },
+              "target": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "methods": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "review_cycle_days": {
+          "type": "integer",
+          "minimum": 1
+        }
+      }
+    },
+    "kpis": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Key performance indicators"
+    },
+    "runbooks": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "steps": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "audit": {
+      "type": "object",
+      "required": ["logging"],
+      "properties": {
+        "logging": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1
+        },
+        "retention_days": {
+          "type": "integer",
+          "minimum": 30
+        },
+        "explainability": {
+          "type": "object",
+          "properties": {
+            "store_rationales": {
+              "type": "boolean"
+            }
+          }
+        }
+      }
+    },
+    "metadata": {
+      "type": "object",
+      "properties": {
+        "created_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updated_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "created_by": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string",
+          "enum": ["draft", "review", "active", "deprecated", "retired"]
+        },
+        "tags": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,213 @@
+# GitHub Organization Repositories - Development Context Source
+# Code context, issues, PRs, and commit messages for technical understanding
+
+id: github_org
+name: "GitHub Organization Repositories"
+type: github
+owner: DevOps
+system_of_record: true
+scope: "org:company-name repos:all exclude:archived"
+
+# Legal and compliance framework
+legal:
+  basis: legitimate_interests
+  pii: possible  # Developer names, emails in commits
+  dpa: "2024-11-01"
+  license: "Internal use only - GitHub Enterprise Agreement"
+
+# Governance controls
+governance:
+  retention_days: 730  # 2 years for development history
+  redaction: "pii_v2_dev"  # Special handling for developer info
+  sensitivity: "Confidential"
+
+# Double Helix integration
+sissa_overlay: SISSA_ACTION_PLANNER
+double_helix_tags:
+  section: SW  # Software development primary
+  strand_default: I  # Issues and bugs
+  auto_tag_patterns:
+    - pattern: "bug|error|exception|crash"
+      section: SW
+      strand: I
+    - pattern: "fix|solution|resolve|patch"
+      section: SW
+      strand: S
+    - pattern: "security|vulnerability|cve"
+      section: SEC
+      strand: I
+    - pattern: "infrastructure|deployment|ci/cd"
+      section: HW
+      strand: I
+    - pattern: "network|api|service|endpoint"
+      section: NET
+      strand: I
+    - pattern: "documentation|readme|guide"
+      section: GOV
+      strand: I
+
+# Security configuration
+security:
+  auth: github_app
+  secret_name: github_app_private_key
+  app_id: "github_app_id"
+  permissions:
+    - "contents:read"
+    - "issues:read"
+    - "pull_requests:read"
+    - "metadata:read"
+  
+# Storage layer configuration
+destinations:
+  bronze: "lake/bronze/github/org/"
+  silver: "lake/silver/code_context/"
+  gold: "lake/gold/development_knowledge/"
+  vector: "vectordb/code_knowledge"
+
+# Refresh and processing
+refresh:
+  schedule: "PT4H"  # Every 4 hours
+  mode: incremental
+  batch_size: 1000
+  api_rate_limit: 5000  # GitHub API limits
+  
+# Quality controls
+quality:
+  min_doc_len: 50   # Shorter for code snippets and issues
+  max_doc_len: 20000
+  dedupe: content_hash
+  exclude_patterns:
+    - "node_modules/**"
+    - "*.min.js"
+    - "*.log"
+    - "*.tmp"
+    - ".git/**"
+  include_file_types:
+    - ".py"
+    - ".js"
+    - ".ts"
+    - ".java"
+    - ".cs"
+    - ".md"
+    - ".yml"
+    - ".yaml"
+    - ".json"
+  
+# Content processing rules
+processing:
+  extract_metadata:
+    - repository_name
+    - file_path
+    - commit_sha
+    - author
+    - commit_date
+    - commit_message
+    - branch
+    - pull_request_id
+    - issue_number
+    - language
+    - file_size
+    - lines_of_code
+  
+  code_analysis:
+    - syntax_parsing: true
+    - function_extraction: true
+    - import_analysis: true
+    - complexity_metrics: true
+    - security_scanning: true
+    
+  chunk_strategy:
+    method: code_aware
+    function_level: true
+    class_level: true
+    file_level: true
+    preserve_context: true
+    
+  embedding_model: "code-search-ada-code-search-code"
+
+# Scoring (0-5 scale for prioritization rubric)
+scoring:
+  value: 4      # High value - technical context and solutions
+  legality: 5   # Full legal rights - internal code
+  effort: 3     # Moderate effort - GitHub API mature but complex
+  risk: 2       # Low risk - internal code, some IP sensitivity
+
+# Expected outputs and usage
+usage:
+  primary_purpose: rag
+  secondary_purposes: 
+    - ft
+    - eval
+  
+  target_models:
+    - code_assistant
+    - technical_support
+    - architecture_advisor
+    
+  use_cases:
+    - code_explanation
+    - bug_resolution
+    - architecture_questions
+    - best_practices
+    
+  evaluation_metrics:
+    - code_relevance
+    - technical_accuracy
+    - solution_completeness
+
+# Special handling for code content
+code_processing:
+  language_detection: true
+  syntax_validation: true
+  
+  extract_patterns:
+    - function_definitions
+    - class_definitions
+    - import_statements
+    - error_handling
+    - test_cases
+    - documentation_strings
+    
+  link_analysis:
+    - cross_file_references
+    - dependency_mapping
+    - call_graph_construction
+    
+  issue_pr_linking:
+    - link_issues_to_fixes
+    - track_resolution_patterns
+    - extract_review_feedback
+
+# Repository filtering and prioritization
+repository_config:
+  priority_repos:
+    - "core-platform"
+    - "security-tools"
+    - "infrastructure"
+    - "shared-libraries"
+  
+  exclude_repos:
+    - "archived-*"
+    - "experimental-*"
+    - "personal-*"
+    
+  branch_strategy:
+    primary: ["main", "master", "develop"]
+    include_feature_branches: false
+    
+# Monitoring and alerting
+monitoring:
+  freshness_threshold_hours: 8
+  quality_threshold_pct: 80
+  api_quota_threshold: 80
+  alert_channels:
+    - teams://devops-platform
+    - slack://data-engineering
+    
+# Integration checkpoints
+integration:
+  cls_audit_events: true
+  sissa_event_generation: true
+  dh_tag_propagation: true
+  code_security_scanning: true
+  dependency_vulnerability_check: true
